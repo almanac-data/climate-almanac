@@ -1,7 +1,20 @@
+# Python
 __pycache__/
 *.pyc
 .venv/
+.venv-dev/
 venv/
-.DS_Store
 *.egg-info/
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Editors / OS
+.DS_Store
+
+# Fleet development overlay — local only, never published.
+# This wires the folder into the Willow fleet (MCP/Kart/memory) on the dev's
+# machine. It references machine-specific absolute paths and must not ship in a
+# public repo. See docs/DEVELOPMENT.md.
+.mcp.json
+.willow/
