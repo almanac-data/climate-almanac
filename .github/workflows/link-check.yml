@@ -1,0 +1,26 @@
+name: link-check
+
+on:
+  schedule:
+    # Daily at 12:00 UTC — reachability sentinel for live/frozen entries.
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Probe canonical URLs
+        run: python scripts/check_links.py --json | tee link-check-report.json
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-report
+          path: link-check-report.json

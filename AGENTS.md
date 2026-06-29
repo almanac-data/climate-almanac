@@ -54,7 +54,7 @@ scripts/check_links.py             reachability checker (read-only; reports, nev
 pip install -r requirements.txt
 python scripts/validate.py       # before any commit that touches catalog/
 python scripts/build_index.py    # regenerate catalog.json after entry changes
-python scripts/check_links.py    # verify which sources are still reachable
+python scripts/check_links.py    # verify which sources are still reachable (requires curl)
 ```
 
 To add a dataset: copy an existing `catalog/*.yaml`, fill every required field, validate,
