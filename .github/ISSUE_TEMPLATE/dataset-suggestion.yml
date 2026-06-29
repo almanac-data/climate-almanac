@@ -1,0 +1,144 @@
+name: "📊 Suggest a dataset"
+description: "Propose a public climate dataset for the catalog. No coding required — a curator will turn this into a catalog entry."
+title: "[dataset] <dataset name>"
+labels: ["dataset-suggestion", "needs-curation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep public climate data findable. You do **not** need to write YAML or open a pull request —
+        just fill in what you know and a curator will translate it into a catalog entry.
+
+        The Almanac is a **catalog, not a host**: we map where data lives, we don't store the data itself.
+        Please point to the **publisher's authoritative home**, not a blog or reposting.
+
+  - type: input
+    id: title
+    attributes:
+      label: Dataset name
+      description: Human-readable name of the dataset.
+      placeholder: "GISS Surface Temperature Analysis (GISTEMP v4)"
+    validations:
+      required: true
+
+  - type: input
+    id: publisher
+    attributes:
+      label: Publisher
+      description: The authoritative producer of the data.
+      placeholder: "NASA Goddard Institute for Space Studies (GISS)"
+    validations:
+      required: true
+
+  - type: input
+    id: canonical_url
+    attributes:
+      label: Canonical URL
+      description: The current authoritative home of the data (the publisher's page or download).
+      placeholder: "https://data.giss.nasa.gov/gistemp/"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: One or two sentences — what the dataset is and why it matters.
+      placeholder: "NASA's global land–ocean surface temperature anomaly product, widely cited in annual global temperature reporting."
+    validations:
+      required: true
+
+  - type: input
+    id: topics
+    attributes:
+      label: Topics
+      description: A few comma-separated tags for discovery.
+      placeholder: "temperature, anomalies, global, trends"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: access_method
+    attributes:
+      label: How is the data accessed?
+      description: Select all that apply (pick the closest if unsure — a curator will confirm).
+      multiple: true
+      options:
+        - web (download from a web page)
+        - api (programmatic API)
+        - bulk (bulk file download)
+        - s3 (AWS S3 bucket)
+        - ftp
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth_required
+    attributes:
+      label: Does access require an account or token?
+      options:
+        - "No — open access"
+        - "Yes — free registration / token"
+        - "Yes — paid or restricted"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License (if known)
+      description: Leave blank if unsure — a curator will verify.
+      placeholder: "public-domain (US Gov work)"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Is the source currently reachable?
+      description: Your best observation. A curator verifies before publishing.
+      options:
+        - "live — reachable and actively maintained"
+        - "frozen — reachable but no longer updated"
+        - "moved — the URL has changed"
+        - "dark — gone / 404"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: former_climate_gov_url
+    attributes:
+      label: Former climate.gov URL (optional)
+      description: If this data used to be surfaced on climate.gov and you know the old link.
+      placeholder: "https://www.climate.gov/news-features/..."
+    validations:
+      required: false
+
+  - type: input
+    id: wayback_url
+    attributes:
+      label: Wayback / archive link (optional)
+      description: An Internet Archive snapshot or other mirror, if you have one.
+      placeholder: "https://web.archive.org/web/.../..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Caveats, coverage (spatial/temporal), update cadence, attribution string, DOI, or why this matters.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before you submit
+      options:
+        - label: This points to the publisher's authoritative source, not a reposting.
+          required: true
+        - label: I understand the Almanac catalogs data and does not host the data files themselves.
+          required: true

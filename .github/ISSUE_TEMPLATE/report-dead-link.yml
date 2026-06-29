@@ -1,0 +1,67 @@
+name: "🔗 Report a dead or moved link"
+description: "Tell us a catalog source has gone dark, moved, or stopped updating. A curator will flip the entry's status."
+title: "[dead-link] <dataset id>"
+labels: ["endpoint-dead", "needs-curation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reachability reports keep the catalog honest. If you found a source that no longer works —
+        or that has moved — let us know what you saw and a curator will update the entry's `status`.
+
+  - type: input
+    id: dataset_id
+    attributes:
+      label: Dataset id (or name)
+      description: The catalog entry slug if you know it (e.g. `nasa-gistemp`), otherwise the dataset name.
+      placeholder: "nasa-gistemp"
+    validations:
+      required: true
+
+  - type: input
+    id: failing_url
+    attributes:
+      label: The URL that failed
+      description: The link you tried that didn't work.
+      placeholder: "https://data.giss.nasa.gov/gistemp/"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: observed
+    attributes:
+      label: What did you observe?
+      options:
+        - "404 / page gone (dark)"
+        - "Redirects somewhere else / new URL (moved)"
+        - "Loads but data no longer updated (frozen)"
+        - "Times out / server error"
+        - "Other (explain below)"
+    validations:
+      required: true
+
+  - type: input
+    id: new_url
+    attributes:
+      label: New URL (if it moved)
+      description: If the data resurfaced at a new authoritative location, paste it here.
+      placeholder: "https://..."
+    validations:
+      required: false
+
+  - type: input
+    id: wayback_url
+    attributes:
+      label: Wayback / archive link (optional)
+      description: An Internet Archive snapshot of the old page, if you have one.
+      placeholder: "https://web.archive.org/web/.../..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What you saw, when you saw it, error messages, or any other context.
+    validations:
+      required: false
