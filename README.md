@@ -1,6 +1,6 @@
 # Climate Almanac
 
-[![Good first issues](https://img.shields.io/github/issues/rudi193-cmd/climate-almanac/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/rudi193-cmd/climate-almanac/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+[![Good first issues](https://img.shields.io/github/issues/almanac-data/climate-almanac/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/almanac-data/climate-almanac/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 
 **An open, versioned index of public climate data — so the record survives when the websites don't.**
 
@@ -60,7 +60,7 @@ python scripts/check_links.py    # report which sources are still reachable
 Adding a dataset is one pull request that adds one file to `catalog/`.
 See [CONTRIBUTING.md](CONTRIBUTING.md). CI validates every entry against the schema.
 
-New here? Pick a [**good first issue**](https://github.com/rudi193-cmd/climate-almanac/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) — verify one canonical URL, add one YAML file, open a PR.
+New here? Pick a [**good first issue**](https://github.com/almanac-data/climate-almanac/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) — verify one canonical URL, add one YAML file, open a PR.
 
 ## License
 

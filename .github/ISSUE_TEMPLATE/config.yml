@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: "📖 Contribution guide"
-    url: https://github.com/rudi193-cmd/climate-almanac/blob/main/CONTRIBUTING.md
+    url: https://github.com/almanac-data/climate-almanac/blob/main/CONTRIBUTING.md
     about: "Prefer to open a pull request yourself? The full curation checklist lives here."
   - name: "🤖 Agent / developer guide"
-    url: https://github.com/rudi193-cmd/climate-almanac/blob/main/AGENTS.md
+    url: https://github.com/almanac-data/climate-almanac/blob/main/AGENTS.md
     about: "Schema invariants, the catalog-not-host rule, and local validation steps."
