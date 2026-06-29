@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://climatealmanac.com/schema/catalog-entry.schema.json",
+  "title": "Climate dataset catalog entry",
+  "description": "One curated entry describing a public climate dataset: what it is, where it canonically lives, how to access it, where it is archived, and whether it is still reachable. The catalog maps data; it does not host it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "description",
+    "publisher",
+    "topics",
+    "source",
+    "access",
+    "license",
+    "attribution",
+    "status",
+    "last_checked"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable kebab-case slug. Must match the filename (minus .yaml). Never reused.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human-readable dataset name."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "One or two sentences: what the dataset is and why it matters."
+    },
+    "publisher": {
+      "type": "string",
+      "description": "Authoritative producer, e.g. 'NOAA NCEI', 'NSIDC', 'NOAA CPC'."
+    },
+    "topics": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Free-tag topics for discovery, e.g. [temperature, sea-ice, anomalies]."
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_url"],
+      "properties": {
+        "canonical_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Current authoritative home of the data."
+        },
+        "former_climate_gov_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "Where climate.gov used to surface it, if known. Null if N/A."
+        },
+        "doi": {
+          "type": ["string", "null"],
+          "description": "Dataset DOI if one exists."
+        }
+      }
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "auth_required"],
+      "properties": {
+        "method": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["web", "api", "bulk", "s3", "ftp"] },
+          "description": "How the data is actually retrieved."
+        },
+        "auth_required": { "type": "boolean" },
+        "auth_note": {
+          "type": ["string", "null"],
+          "description": "What credential is needed, e.g. 'free NCEI CDO token'."
+        },
+        "rate_limit": {
+          "type": ["string", "null"],
+          "description": "Documented rate limit, free text."
+        }
+      }
+    },
+    "format": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "File/serialization formats offered, e.g. [csv, json, netcdf, geotiff]."
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spatial": { "type": "string", "description": "e.g. global, CONUS, Arctic." },
+        "temporal": { "type": "string", "description": "e.g. '1850-present'." },
+        "cadence": {
+          "enum": ["daily", "weekly", "monthly", "seasonal", "annual", "event", "static", "irregular"],
+          "description": "Update frequency."
+        }
+      }
+    },
+    "license": {
+      "type": "string",
+      "description": "e.g. 'public-domain (US Gov work)', 'CC-BY-4.0'."
+    },
+    "attribution": {
+      "type": "string",
+      "description": "Required attribution string for redistribution."
+    },
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where copies live, beyond the canonical source.",
+      "properties": {
+        "wayback_url": { "type": ["string", "null"], "format": "uri" },
+        "noaa_s3": { "type": ["string", "null"], "description": "AWS Open Data path if mirrored there." },
+        "mirror": { "type": ["string", "null"], "description": "Populated ONLY if this project hosts a copy." }
+      }
+    },
+    "status": {
+      "enum": ["live", "moved", "dark", "frozen", "mirrored"],
+      "description": "live=reachable & maintained; moved=URL changed; dark=gone/404; frozen=reachable but no longer updated; mirrored=we hold a copy."
+    },
+    "last_checked": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date the status was last verified (YYYY-MM-DD). The reachability checker writes this back."
+    },
+    "checksum": {
+      "type": ["string", "null"],
+      "description": "Checksum of a mirrored artifact, if archive.mirror is set."
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Curator notes: caveats, history, why status changed."
+    }
+  }
+}

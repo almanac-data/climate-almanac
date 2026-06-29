@@ -1,0 +1,34 @@
+id: noaa-climate-at-a-glance
+title: Climate at a Glance — Global & National Time Series
+description: >
+  Monthly temperature and precipitation anomalies for the globe, nations, US
+  regions, states, and counties. NCEI's flagship public-facing trend product;
+  the source behind most "warmest year on record" reporting.
+publisher: NOAA NCEI
+topics: [temperature, precipitation, anomalies, trends]
+source:
+  canonical_url: https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
+  former_climate_gov_url: https://www.climate.gov/maps-data/dataset/climate-glance-global-temperature
+  doi: null
+access:
+  method: [web, api]
+  auth_required: false
+  auth_note: null
+  rate_limit: "NCEI access API, no published hard limit; be polite"
+format: [csv, json]
+coverage:
+  spatial: global, national, US state/county
+  temporal: "1850-present (global); 1895-present (US)"
+  cadence: monthly
+license: public-domain (US Gov work)
+attribution: "NOAA National Centers for Environmental Information, Climate at a Glance"
+archive:
+  wayback_url: https://web.archive.org/web/2026*/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
+  noaa_s3: null
+  mirror: null
+status: live
+last_checked: "2026-06-28"
+checksum: null
+notes: >
+  Core dataset — high priority to keep mapped. Time series are small (CSV per
+  region) and would be cheap to mirror if it ever darkens.

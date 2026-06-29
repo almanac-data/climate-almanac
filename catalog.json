@@ -1,0 +1,154 @@
+{
+  "name": "Climate Almanac",
+  "description": "An open, versioned index of public climate data.",
+  "count": 3,
+  "by_status": {
+    "frozen": 1,
+    "live": 2
+  },
+  "entries": [
+    {
+      "id": "noaa-billion-dollar-disasters",
+      "title": "Billion-Dollar Weather and Climate Disasters",
+      "description": "Database of US weather/climate disasters each exceeding $1B in damages (CPI-adjusted), 1980-present, with event-level cost, deaths, and type. The canonical record for US climate-disaster cost trends.\n",
+      "publisher": "NOAA NCEI",
+      "topics": [
+        "disasters",
+        "economic-impact",
+        "extreme-weather",
+        "costs"
+      ],
+      "source": {
+        "canonical_url": "https://www.ncei.noaa.gov/access/billions/",
+        "former_climate_gov_url": "https://www.climate.gov/news-features/blogs/beyond-data/2023-historic-year-us-billion-dollar-weather-and-climate",
+        "doi": "10.25921/stkw-7w73"
+      },
+      "access": {
+        "method": [
+          "web",
+          "api"
+        ],
+        "auth_required": false,
+        "auth_note": null,
+        "rate_limit": null
+      },
+      "format": [
+        "csv",
+        "json"
+      ],
+      "coverage": {
+        "spatial": "United States",
+        "temporal": "1980-2024",
+        "cadence": "event"
+      },
+      "license": "public-domain (US Gov work)",
+      "attribution": "NOAA National Centers for Environmental Information (NCEI), U.S. Billion-Dollar Weather and Climate Disasters",
+      "archive": {
+        "wayback_url": "https://web.archive.org/web/2025*/https://www.ncei.noaa.gov/access/billions/",
+        "noaa_s3": null,
+        "mirror": null
+      },
+      "status": "frozen",
+      "last_checked": "2026-06-28",
+      "checksum": null,
+      "notes": "THE THESIS ENTRY. NOAA announced in 2025 it would stop updating this database. Historical data through 2024 remains reachable but is no longer maintained — hence status=frozen. This is exactly the kind of small, high-value, at-risk artifact that should be prioritized for an actual mirror (it is a single modest CSV). Verify current reachability before relying on it; if the page 404s, flip status to dark and populate archive.wayback_url + archive.mirror.\n"
+    },
+    {
+      "id": "noaa-climate-at-a-glance",
+      "title": "Climate at a Glance — Global & National Time Series",
+      "description": "Monthly temperature and precipitation anomalies for the globe, nations, US regions, states, and counties. NCEI's flagship public-facing trend product; the source behind most \"warmest year on record\" reporting.\n",
+      "publisher": "NOAA NCEI",
+      "topics": [
+        "temperature",
+        "precipitation",
+        "anomalies",
+        "trends"
+      ],
+      "source": {
+        "canonical_url": "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/",
+        "former_climate_gov_url": "https://www.climate.gov/maps-data/dataset/climate-glance-global-temperature",
+        "doi": null
+      },
+      "access": {
+        "method": [
+          "web",
+          "api"
+        ],
+        "auth_required": false,
+        "auth_note": null,
+        "rate_limit": "NCEI access API, no published hard limit; be polite"
+      },
+      "format": [
+        "csv",
+        "json"
+      ],
+      "coverage": {
+        "spatial": "global, national, US state/county",
+        "temporal": "1850-present (global); 1895-present (US)",
+        "cadence": "monthly"
+      },
+      "license": "public-domain (US Gov work)",
+      "attribution": "NOAA National Centers for Environmental Information, Climate at a Glance",
+      "archive": {
+        "wayback_url": "https://web.archive.org/web/2026*/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/",
+        "noaa_s3": null,
+        "mirror": null
+      },
+      "status": "live",
+      "last_checked": "2026-06-28",
+      "checksum": null,
+      "notes": "Core dataset — high priority to keep mapped. Time series are small (CSV per region) and would be cheap to mirror if it ever darkens.\n"
+    },
+    {
+      "id": "nsidc-sea-ice-index",
+      "title": "Sea Ice Index",
+      "description": "Daily and monthly Arctic and Antarctic sea ice extent and concentration, with anomaly fields and trend imagery. The standard reference for sea-ice decline; widely cited and surfaced by climate.gov.\n",
+      "publisher": "NSIDC (NOAA@NSIDC)",
+      "topics": [
+        "sea-ice",
+        "cryosphere",
+        "arctic",
+        "antarctic",
+        "extent"
+      ],
+      "source": {
+        "canonical_url": "https://nsidc.org/data/seaice_index",
+        "former_climate_gov_url": "https://www.climate.gov/news-features/understanding-climate/climate-change-arctic-sea-ice-summer-minimum",
+        "doi": "10.7265/N5K072F8"
+      },
+      "access": {
+        "method": [
+          "web",
+          "bulk",
+          "ftp"
+        ],
+        "auth_required": false,
+        "auth_note": null,
+        "rate_limit": null
+      },
+      "format": [
+        "csv",
+        "geotiff",
+        "shapefile",
+        "png",
+        "netcdf"
+      ],
+      "coverage": {
+        "spatial": "Arctic, Antarctic",
+        "temporal": "1978-present",
+        "cadence": "daily"
+      },
+      "license": "public-domain (US Gov work)",
+      "attribution": "Fetterer, F. et al. Sea Ice Index, NSIDC, Boulder, Colorado USA",
+      "archive": {
+        "wayback_url": "https://web.archive.org/web/2026*/https://nsidc.org/data/seaice_index",
+        "noaa_s3": null,
+        "mirror": null
+      },
+      "status": "live",
+      "last_checked": "2026-06-28",
+      "checksum": null,
+      "notes": "Hosted at NSIDC (a university-based DAAC), so somewhat insulated from federal site shutdowns — but funded partly through NOAA/NASA, so not immune. Worth watching.\n"
+    }
+  ]
+}

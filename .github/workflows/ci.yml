@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Validate catalog entries
+        run: python scripts/validate.py
+      - name: Build index (must be committed and up to date)
+        run: |
+          python scripts/build_index.py
+          if ! git diff --exit-code catalog.json; then
+            echo "::error::catalog.json is stale — run 'python scripts/build_index.py' and commit the result."
+            exit 1
+          fi

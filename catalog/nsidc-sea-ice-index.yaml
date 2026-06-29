@@ -1,0 +1,35 @@
+id: nsidc-sea-ice-index
+title: Sea Ice Index
+description: >
+  Daily and monthly Arctic and Antarctic sea ice extent and concentration,
+  with anomaly fields and trend imagery. The standard reference for sea-ice
+  decline; widely cited and surfaced by climate.gov.
+publisher: NSIDC (NOAA@NSIDC)
+topics: [sea-ice, cryosphere, arctic, antarctic, extent]
+source:
+  canonical_url: https://nsidc.org/data/seaice_index
+  former_climate_gov_url: https://www.climate.gov/news-features/understanding-climate/climate-change-arctic-sea-ice-summer-minimum
+  doi: "10.7265/N5K072F8"
+access:
+  method: [web, bulk, ftp]
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format: [csv, geotiff, shapefile, png, netcdf]
+coverage:
+  spatial: Arctic, Antarctic
+  temporal: "1978-present"
+  cadence: daily
+license: public-domain (US Gov work)
+attribution: "Fetterer, F. et al. Sea Ice Index, NSIDC, Boulder, Colorado USA"
+archive:
+  wayback_url: https://web.archive.org/web/2026*/https://nsidc.org/data/seaice_index
+  noaa_s3: null
+  mirror: null
+status: live
+last_checked: "2026-06-28"
+checksum: null
+notes: >
+  Hosted at NSIDC (a university-based DAAC), so somewhat insulated from federal
+  site shutdowns — but funded partly through NOAA/NASA, so not immune. Worth
+  watching.

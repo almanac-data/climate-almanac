@@ -1,0 +1,18 @@
+CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+
+The catalog data in this repository (the contents of catalog/ and the generated
+catalog.json) is dedicated to the public domain under Creative Commons CC0 1.0.
+
+To the extent possible under law, the Climate Almanac contributors have waived
+all copyright and related or neighboring rights to the Climate Almanac catalog
+data. This work is published from the United States.
+
+You can copy, modify, distribute and use the catalog data, even for commercial
+purposes, all without asking permission.
+
+Note: this dedication covers the *catalog metadata* (the index of datasets).
+The underlying datasets it points to are the works of their respective
+publishers (predominantly U.S. Government works in the public domain); honor
+each entry's `attribution` field when redistributing the data itself.
+
+Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode

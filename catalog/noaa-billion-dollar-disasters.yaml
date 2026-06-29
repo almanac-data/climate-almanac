@@ -1,0 +1,39 @@
+id: noaa-billion-dollar-disasters
+title: Billion-Dollar Weather and Climate Disasters
+description: >
+  Database of US weather/climate disasters each exceeding $1B in damages
+  (CPI-adjusted), 1980-present, with event-level cost, deaths, and type. The
+  canonical record for US climate-disaster cost trends.
+publisher: NOAA NCEI
+topics: [disasters, economic-impact, extreme-weather, costs]
+source:
+  canonical_url: https://www.ncei.noaa.gov/access/billions/
+  former_climate_gov_url: https://www.climate.gov/news-features/blogs/beyond-data/2023-historic-year-us-billion-dollar-weather-and-climate
+  doi: "10.25921/stkw-7w73"
+access:
+  method: [web, api]
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format: [csv, json]
+coverage:
+  spatial: United States
+  temporal: "1980-2024"
+  cadence: event
+license: public-domain (US Gov work)
+attribution: "NOAA National Centers for Environmental Information (NCEI), U.S. Billion-Dollar Weather and Climate Disasters"
+archive:
+  wayback_url: https://web.archive.org/web/2025*/https://www.ncei.noaa.gov/access/billions/
+  noaa_s3: null
+  mirror: null
+status: frozen
+last_checked: "2026-06-28"
+checksum: null
+notes: >
+  THE THESIS ENTRY. NOAA announced in 2025 it would stop updating this
+  database. Historical data through 2024 remains reachable but is no longer
+  maintained — hence status=frozen. This is exactly the kind of small,
+  high-value, at-risk artifact that should be prioritized for an actual mirror
+  (it is a single modest CSV). Verify current reachability before relying on it;
+  if the page 404s, flip status to dark and populate archive.wayback_url +
+  archive.mirror.
