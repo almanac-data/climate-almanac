@@ -5,6 +5,16 @@ on:
     # Daily at 12:00 UTC — reachability sentinel for live/frozen entries.
     - cron: "0 12 * * *"
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Plan alerts without opening/closing issues"
+        type: boolean
+        default: false
+
+# Needed so the alert step can open, update, and close issues.
+permissions:
+  contents: read
+  issues: write
 
 jobs:
   check-links:
@@ -17,7 +27,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Probe canonical URLs
+        # check_links.py exits non-zero when an entry is unreachable; tee keeps the
+        # step green so the alert step below always runs on the captured report.
         run: python scripts/check_links.py --json | tee link-check-report.json
+      - name: Open or refresh dead-link alerts
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/alert_on_dead_links.py \
+            --report link-check-report.json \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4

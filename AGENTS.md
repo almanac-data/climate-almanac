@@ -28,7 +28,9 @@ catalog.json                       GENERATED build artifact — do not hand-edit
 scripts/validate.py                schema + filename==id + uniqueness checks (CI gate)
 scripts/build_index.py             catalog/*.yaml -> catalog.json
 scripts/check_links.py             reachability checker (read-only; reports, never rewrites)
+scripts/alert_on_dead_links.py     turns a check_links report into GitHub issues (idempotent; circuit-breaker)
 .github/workflows/ci.yml           runs validate + a stale-index guard on every PR
+.github/workflows/link-check.yml   daily reachability probe -> auto-opens/closes dead-link issues
 ```
 
 ## Working rules / invariants
