@@ -1,7 +1,6 @@
 # Climate Almanac
 
 [![CI](https://github.com/almanac-data/climate-almanac/actions/workflows/ci.yml/badge.svg)](https://github.com/almanac-data/climate-almanac/actions/workflows/ci.yml)
-
 [![Good first issues](https://img.shields.io/github/issues/almanac-data/climate-almanac/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/almanac-data/climate-almanac/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 
 **An open, versioned index of public climate data — so the record survives when the websites don't.**
@@ -20,10 +19,12 @@ still reachable today.
 > open-data era: kept in version control, built by many hands, and designed to outlive any single
 > website.
 
+## Project stage
+Climate Almanac is a **seed catalog, seeking stewards, prioritizing accuracy-over-coverage**. For details on our overarching philosophy and management guidelines, see [WHY_ALMANAC.md](WHY_ALMANAC.md) and [GOVERNANCE.md](GOVERNANCE.md).
+
 ## Why catalog-first
 
-Mirroring petabytes of federal climate data is neither possible nor necessary — most of it is
-still served by the agencies. The real, unfilled gap is the **curation and reachability layer**.
+Mirroring petabytes of federal climate data is an enormous task — most of it is still served by the agencies. The real, unfilled gap is the **curation and reachability layer**.
 A catalog is:
 
 - **Sustainable** — a single maintainer can keep it accurate; it doesn't need a data center.
@@ -36,15 +37,13 @@ stopped updating in 2025, flagged `frozen` and marked for priority mirroring.
 
 ## What's here
 
-```
+```text
 schema/catalog-entry.schema.json   # the contract every entry must satisfy
 catalog/*.yaml                     # one curated dataset per file
 scripts/validate.py                # schema + integrity checks (CI gate)
 scripts/build_index.py             # catalog/*.yaml -> catalog.json
 scripts/check_links.py             # reachability checker (the path to automated monitoring)
 catalog.json                       # generated, machine-readable full index
-```
-
 ## Using the catalog
 
 The build artifact `catalog.json` is the machine-readable index — point tools at it.
