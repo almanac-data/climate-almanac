@@ -1,9 +1,16 @@
+# Almanac vertical identity. The schema, scripts, and CI all read from here.
+name: "Climate Almanac"
+slug: "climate-almanac"
+description: "An open, versioned index of public climate data."
+homepage: "https://github.com/almanac-data/climate-almanac"
+domain: "climate"
 
 # ---------------------------------------------------------------------------
-# Reachability monitoring (added by headless-fallback propagation).
+# Reachability monitoring
 # ---------------------------------------------------------------------------
 reachability:
   # Verify CDN-bot-blocked federal sources (Census, Congress.gov, GAO, ...) with
   # a real headless Chromium. Requires Playwright (requirements-headless.txt); CI
   # installs the browser only when this is true.
+  # Climate entries are mostly NOAA/NASA/agency climate endpoints — curl suffices.
   headless: false
