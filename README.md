@@ -44,6 +44,8 @@ scripts/validate.py                # schema + integrity checks (CI gate)
 scripts/build_index.py             # catalog/*.yaml -> catalog.json
 scripts/check_links.py             # reachability checker (the path to automated monitoring)
 catalog.json                       # generated, machine-readable full index
+```
+
 ## Using the catalog
 
 The build artifact `catalog.json` is the machine-readable index — point tools at it.
