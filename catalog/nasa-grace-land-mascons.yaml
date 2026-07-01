@@ -4,6 +4,9 @@ title: GRACE/GRACE-FO Land Mass Concentration (Mascon) Time Series
 description: |
   NASA/JPL gridded time series of terrestrial water storage changes from the GRACE and GRACE-FO gravity missions. Used for drought, groundwater, and ice mass balance studies at regional to global scales.
 publisher: NASA JPL Physical Oceanography Distributed Active Archive Center (PO.DAAC)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - gravity
 - water-storage

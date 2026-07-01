@@ -4,6 +4,9 @@ title: HadCRUT5 Global Temperature Dataset
 description: |
   Met Office Hadley Centre / UEA CRU gridded near-surface temperature anomalies on a 5° grid. One of the long-running global temperature records used in IPCC assessments alongside NASA and NOAA products.
 publisher: UK Met Office Hadley Centre / Climatic Research Unit
+jurisdiction:
+  scope: national
+  country: GB
 topics:
 - temperature
 - anomalies

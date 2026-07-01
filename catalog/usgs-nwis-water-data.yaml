@@ -4,6 +4,9 @@ title: USGS National Water Information System (NWIS)
 description: |
   Real-time and historical streamflow, groundwater, water quality, and related measurements from USGS monitoring networks. The primary federal portal for US hydrologic observations used in drought, flood, and climate-impact studies.
 publisher: U.S. Geological Survey (USGS)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - hydrology
 - streamflow

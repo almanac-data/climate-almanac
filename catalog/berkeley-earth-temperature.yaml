@@ -4,6 +4,9 @@ title: Berkeley Earth Surface Temperature
 description: |
   Independent global land and ocean surface temperature analysis with gridded fields and uncertainty estimates. Often used as a cross-check against government temperature indices.
 publisher: Berkeley Earth
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - temperature
 - anomalies

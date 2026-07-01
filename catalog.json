@@ -13,6 +13,10 @@
       "title": "Berkeley Earth Surface Temperature",
       "description": "Independent global land and ocean surface temperature analysis with gridded fields and uncertainty estimates. Often used as a cross-check against government temperature indices.\n",
       "publisher": "Berkeley Earth",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "temperature",
         "anomalies",
@@ -62,6 +66,10 @@
       "title": "ERA5 Reanalysis (single levels)",
       "description": "Fifth-generation ECMWF global atmospheric reanalysis at ~31 km resolution, hourly from 1940 to near-present. The standard open reanalysis for weather and climate research when a consistent gridded product is needed.\n",
       "publisher": "Copernicus Climate Change Service (C3S) / ECMWF",
+      "jurisdiction": {
+        "scope": "regional-bloc",
+        "country": null
+      },
       "topics": [
         "reanalysis",
         "atmosphere",
@@ -115,6 +123,10 @@
       "title": "CPC Long-Lead Climate Outlooks",
       "description": "NOAA Climate Prediction Center seasonal and long-lead outlooks for temperature, precipitation, and drought across the United States. Operational guidance products for planners and researchers tracking climate variability.\n",
       "publisher": "NOAA Climate Prediction Center (CPC)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "forecasts",
         "seasonal",
@@ -165,6 +177,10 @@
       "title": "HadCRUT5 Global Temperature Dataset",
       "description": "Met Office Hadley Centre / UEA CRU gridded near-surface temperature anomalies on a 5° grid. One of the long-running global temperature records used in IPCC assessments alongside NASA and NOAA products.\n",
       "publisher": "UK Met Office Hadley Centre / Climatic Research Unit",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "GB"
+      },
       "topics": [
         "temperature",
         "anomalies",
@@ -216,6 +232,10 @@
       "title": "GISS Surface Temperature Analysis (GISTEMP v4)",
       "description": "NASA's global land–ocean surface temperature anomaly product, widely cited in annual global temperature reporting. Gridded anomalies and station-based analysis with open data files and documented methods.\n",
       "publisher": "NASA Goddard Institute for Space Studies (GISS)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "temperature",
         "anomalies",
@@ -265,6 +285,10 @@
       "title": "GRACE/GRACE-FO Land Mass Concentration (Mascon) Time Series",
       "description": "NASA/JPL gridded time series of terrestrial water storage changes from the GRACE and GRACE-FO gravity missions. Used for drought, groundwater, and ice mass balance studies at regional to global scales.\n",
       "publisher": "NASA JPL Physical Oceanography Distributed Active Archive Center (PO.DAAC)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "gravity",
         "water-storage",
@@ -316,6 +340,10 @@
       "title": "NOAA Climate Data Online (CDO)",
       "description": "Searchable archive and API for NOAA/NCEI station, radar, and derived climate datasets. The general-purpose access path for many NCEI holdings beyond single-product landing pages.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "stations",
         "api",
@@ -365,6 +393,10 @@
       "title": "Global Ocean Heat Content (NCEI)",
       "description": "Observed ocean heat content anomalies for the upper ocean layers, a key indicator of Earth's energy imbalance and climate change. Maintained by NCEI as part of global ocean monitoring products.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "ocean",
         "heat-content",
@@ -413,6 +445,10 @@
       "title": "NOAA Storm Events Database",
       "description": "Official record of severe storms and significant weather phenomena across the United States, with fatalities, injuries, and property damage. Widely used for hazard climatology and disaster research.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "storms",
         "severe-weather",
@@ -460,6 +496,10 @@
       "title": "Billion-Dollar Weather and Climate Disasters",
       "description": "Database of US weather/climate disasters each exceeding $1B in damages (CPI-adjusted), 1980-present, with event-level cost, deaths, and type. The canonical record for US climate-disaster cost trends.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "disasters",
         "economic-impact",
@@ -519,6 +559,10 @@
       "title": "Climate at a Glance — Global & National Time Series",
       "description": "Monthly temperature and precipitation anomalies for the globe, nations, US regions, states, and counties. NCEI's flagship public-facing trend product; the source behind most \"warmest year on record\" reporting.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "temperature",
         "precipitation",
@@ -575,6 +619,10 @@
       "title": "Global Historical Climatology Network — Daily (GHCN-Daily)",
       "description": "Daily station observations of temperature, precipitation, and snow for tens of thousands of land stations worldwide. The backbone of many global and regional climate analyses and a primary input to gridded products.\n",
       "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "temperature",
         "precipitation",
@@ -628,6 +676,10 @@
       "title": "Global Monitoring Laboratory — CO₂ Trends",
       "description": "Atmospheric carbon dioxide measurements from the Mauna Loa and global in situ network, including the iconic Keeling Curve. The reference time series for anthropogenic CO₂ increase in public communication and research.\n",
       "publisher": "NOAA Global Monitoring Laboratory (GML)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "carbon-dioxide",
         "greenhouse-gases",
@@ -676,6 +728,10 @@
       "title": "North American Snow Cover Extent (G02135)",
       "description": "Weekly snow cover extent for North America from the Rutgers Global Snow Lab product archived at NSIDC. Complements sea-ice products for cryosphere and hydrology monitoring.\n",
       "publisher": "NSIDC (Rutgers Global Snow Lab product)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "snow",
         "cryosphere",
@@ -728,6 +784,10 @@
       "title": "Sea Ice Index",
       "description": "Daily and monthly Arctic and Antarctic sea ice extent and concentration, with anomaly fields and trend imagery. The standard reference for sea-ice decline; widely cited and surfaced by climate.gov.\n",
       "publisher": "NSIDC (NOAA@NSIDC)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "sea-ice",
         "cryosphere",
@@ -792,6 +852,10 @@
       "title": "U.S. Drought Monitor",
       "description": "Weekly map and tabular summary of drought conditions across the United States, blending physical indicators and expert synthesis. The operational drought status record cited in media, agriculture, and policy.\n",
       "publisher": "University of Nebraska–Lincoln (NOAA/NIDIS/USDA partners)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "drought",
         "united-states",
@@ -843,6 +907,10 @@
       "title": "USGS National Water Information System (NWIS)",
       "description": "Real-time and historical streamflow, groundwater, water quality, and related measurements from USGS monitoring networks. The primary federal portal for US hydrologic observations used in drought, flood, and climate-impact studies.\n",
       "publisher": "U.S. Geological Survey (USGS)",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
       "topics": [
         "hydrology",
         "streamflow",

@@ -4,6 +4,9 @@ title: ERA5 Reanalysis (single levels)
 description: |
   Fifth-generation ECMWF global atmospheric reanalysis at ~31 km resolution, hourly from 1940 to near-present. The standard open reanalysis for weather and climate research when a consistent gridded product is needed.
 publisher: Copernicus Climate Change Service (C3S) / ECMWF
+jurisdiction:
+  scope: regional-bloc
+  country: null
 topics:
 - reanalysis
 - atmosphere

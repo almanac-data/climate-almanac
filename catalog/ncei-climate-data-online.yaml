@@ -4,6 +4,9 @@ title: NOAA Climate Data Online (CDO)
 description: |
   Searchable archive and API for NOAA/NCEI station, radar, and derived climate datasets. The general-purpose access path for many NCEI holdings beyond single-product landing pages.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - stations
 - api

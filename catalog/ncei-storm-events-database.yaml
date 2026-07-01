@@ -4,6 +4,9 @@ title: NOAA Storm Events Database
 description: |
   Official record of severe storms and significant weather phenomena across the United States, with fatalities, injuries, and property damage. Widely used for hazard climatology and disaster research.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - storms
 - severe-weather

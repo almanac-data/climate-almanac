@@ -4,6 +4,9 @@ title: Global Monitoring Laboratory — CO₂ Trends
 description: |
   Atmospheric carbon dioxide measurements from the Mauna Loa and global in situ network, including the iconic Keeling Curve. The reference time series for anthropogenic CO₂ increase in public communication and research.
 publisher: NOAA Global Monitoring Laboratory (GML)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - carbon-dioxide
 - greenhouse-gases

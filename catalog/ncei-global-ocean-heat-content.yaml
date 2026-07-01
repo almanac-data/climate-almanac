@@ -4,6 +4,9 @@ title: Global Ocean Heat Content (NCEI)
 description: |
   Observed ocean heat content anomalies for the upper ocean layers, a key indicator of Earth's energy imbalance and climate change. Maintained by NCEI as part of global ocean monitoring products.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - ocean
 - heat-content

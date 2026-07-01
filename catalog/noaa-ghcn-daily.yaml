@@ -4,6 +4,9 @@ title: Global Historical Climatology Network — Daily (GHCN-Daily)
 description: |
   Daily station observations of temperature, precipitation, and snow for tens of thousands of land stations worldwide. The backbone of many global and regional climate analyses and a primary input to gridded products.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - temperature
 - precipitation

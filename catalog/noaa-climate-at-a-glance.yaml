@@ -4,6 +4,9 @@ title: Climate at a Glance — Global & National Time Series
 description: |
   Monthly temperature and precipitation anomalies for the globe, nations, US regions, states, and counties. NCEI's flagship public-facing trend product; the source behind most "warmest year on record" reporting.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - temperature
 - precipitation

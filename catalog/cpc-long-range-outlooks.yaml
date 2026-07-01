@@ -4,6 +4,9 @@ title: CPC Long-Lead Climate Outlooks
 description: |
   NOAA Climate Prediction Center seasonal and long-lead outlooks for temperature, precipitation, and drought across the United States. Operational guidance products for planners and researchers tracking climate variability.
 publisher: NOAA Climate Prediction Center (CPC)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - forecasts
 - seasonal

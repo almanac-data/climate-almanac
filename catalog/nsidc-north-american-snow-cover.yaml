@@ -4,6 +4,9 @@ title: North American Snow Cover Extent (G02135)
 description: |
   Weekly snow cover extent for North America from the Rutgers Global Snow Lab product archived at NSIDC. Complements sea-ice products for cryosphere and hydrology monitoring.
 publisher: NSIDC (Rutgers Global Snow Lab product)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - snow
 - cryosphere

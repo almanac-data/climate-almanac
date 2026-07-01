@@ -4,6 +4,9 @@ title: Sea Ice Index
 description: |
   Daily and monthly Arctic and Antarctic sea ice extent and concentration, with anomaly fields and trend imagery. The standard reference for sea-ice decline; widely cited and surfaced by climate.gov.
 publisher: NSIDC (NOAA@NSIDC)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - sea-ice
 - cryosphere

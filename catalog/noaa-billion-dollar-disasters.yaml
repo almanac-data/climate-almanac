@@ -4,6 +4,9 @@ title: Billion-Dollar Weather and Climate Disasters
 description: |
   Database of US weather/climate disasters each exceeding $1B in damages (CPI-adjusted), 1980-present, with event-level cost, deaths, and type. The canonical record for US climate-disaster cost trends.
 publisher: NOAA NCEI
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - disasters
 - economic-impact

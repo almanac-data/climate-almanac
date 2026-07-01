@@ -4,6 +4,9 @@ title: U.S. Drought Monitor
 description: |
   Weekly map and tabular summary of drought conditions across the United States, blending physical indicators and expert synthesis. The operational drought status record cited in media, agriculture, and policy.
 publisher: University of Nebraska–Lincoln (NOAA/NIDIS/USDA partners)
+jurisdiction:
+  scope: national
+  country: US
 topics:
 - drought
 - united-states
