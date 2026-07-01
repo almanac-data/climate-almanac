@@ -1,32 +1,40 @@
 id: ncei-global-ocean-heat-content
+type: dataset
 title: Global Ocean Heat Content (NCEI)
-description: >
-  Observed ocean heat content anomalies for the upper ocean layers, a key
-  indicator of Earth's energy imbalance and climate change. Maintained by NCEI
-  as part of global ocean monitoring products.
+description: |
+  Observed ocean heat content anomalies for the upper ocean layers, a key indicator of Earth's energy imbalance and climate change. Maintained by NCEI as part of global ocean monitoring products.
 publisher: NOAA NCEI
-topics: [ocean, heat-content, temperature, anomalies]
+topics:
+- ocean
+- heat-content
+- temperature
+- anomalies
 source:
   canonical_url: https://www.ncei.noaa.gov/access/global-ocean-heat-content/
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [txt, netcdf]
+format:
+- txt
+- netcdf
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global ocean
-  temporal: "1955-present"
+  temporal: 1955-present
   cadence: seasonal
 license: public-domain (US Gov work)
-attribution: "NOAA National Centers for Environmental Information, Global Ocean Heat Content"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: NOAA National Centers for Environmental Information, Global Ocean Heat Content
 notes: null

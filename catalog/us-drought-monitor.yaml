@@ -1,32 +1,43 @@
 id: us-drought-monitor
+type: dataset
 title: U.S. Drought Monitor
-description: >
-  Weekly map and tabular summary of drought conditions across the United States,
-  blending physical indicators and expert synthesis. The operational drought
-  status record cited in media, agriculture, and policy.
-publisher: "University of Nebraska–Lincoln (NOAA/NIDIS/USDA partners)"
-topics: [drought, united-states, hazards, weekly]
+description: |
+  Weekly map and tabular summary of drought conditions across the United States, blending physical indicators and expert synthesis. The operational drought status record cited in media, agriculture, and policy.
+publisher: University of Nebraska–Lincoln (NOAA/NIDIS/USDA partners)
+topics:
+- drought
+- united-states
+- hazards
+- weekly
 source:
   canonical_url: https://droughtmonitor.unl.edu/
-  former_climate_gov_url: https://www.climate.gov/maps-data/dataset/current-drought-conditions-united-states
-  doi: null
 access:
-  method: [web, bulk, api]
+  method:
+  - web
+  - bulk
+  - api
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [gif, shapefile, kmz, txt]
+format:
+- gif
+- shapefile
+- kmz
+- txt
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: United States and Puerto Rico
-  temporal: "2000-present"
+  temporal: 2000-present
   cadence: weekly
 license: public-domain (US Gov partner product; see site terms)
-attribution: "U.S. Drought Monitor — USDA, NOAA, and University of Nebraska–Lincoln"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: U.S. Drought Monitor — USDA, NOAA, and University of Nebraska–Lincoln
 notes: null

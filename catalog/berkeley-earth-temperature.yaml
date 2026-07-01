@@ -1,32 +1,41 @@
 id: berkeley-earth-temperature
+type: dataset
 title: Berkeley Earth Surface Temperature
-description: >
-  Independent global land and ocean surface temperature analysis with gridded
-  fields and uncertainty estimates. Often used as a cross-check against
-  government temperature indices.
+description: |
+  Independent global land and ocean surface temperature analysis with gridded fields and uncertainty estimates. Often used as a cross-check against government temperature indices.
 publisher: Berkeley Earth
-topics: [temperature, anomalies, global, independent-analysis]
+topics:
+- temperature
+- anomalies
+- global
+- independent-analysis
 source:
   canonical_url: https://berkeleyearth.org/data/
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [netcdf, csv, txt]
+format:
+- netcdf
+- csv
+- txt
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global
-  temporal: "1850-present"
+  temporal: 1850-present
   cadence: monthly
-license: "CC-BY-NC-SA-4.0 (see Berkeley Earth terms for commercial use)"
-attribution: "Berkeley Earth Surface Temperature Data"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+license: CC-BY-NC-SA-4.0 (see Berkeley Earth terms for commercial use)
+attribution: Berkeley Earth Surface Temperature Data
 notes: null

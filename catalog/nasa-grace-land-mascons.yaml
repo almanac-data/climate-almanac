@@ -1,34 +1,43 @@
 id: nasa-grace-land-mascons
+type: dataset
 title: GRACE/GRACE-FO Land Mass Concentration (Mascon) Time Series
-description: >
-  NASA/JPL gridded time series of terrestrial water storage changes from the
-  GRACE and GRACE-FO gravity missions. Used for drought, groundwater, and ice
-  mass balance studies at regional to global scales.
+description: |
+  NASA/JPL gridded time series of terrestrial water storage changes from the GRACE and GRACE-FO gravity missions. Used for drought, groundwater, and ice mass balance studies at regional to global scales.
 publisher: NASA JPL Physical Oceanography Distributed Active Archive Center (PO.DAAC)
-topics: [gravity, water-storage, drought, cryosphere, groundwater]
+topics:
+- gravity
+- water-storage
+- drought
+- cryosphere
+- groundwater
 source:
   canonical_url: https://podaac.jpl.nasa.gov/dataset/GRACE_LAND_MASCON_CRI_TIME_SERIES_RL0603_Mascons
-  former_climate_gov_url: null
-  doi: "10.5067/TEMSC-3MJCN"
+  identifiers:
+    doi: 10.5067/TEMSC-3MJCN
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: true
-  auth_note: "Free NASA Earthdata Login required for PO.DAAC downloads"
+  auth_note: Free NASA Earthdata Login required for PO.DAAC downloads
   rate_limit: null
-format: [netcdf]
+format:
+- netcdf
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global land
-  temporal: "2002-present (mission gaps documented)"
+  temporal: 2002-present (mission gaps documented)
   cadence: monthly
 license: public-domain (US Gov work)
-attribution: "NASA JPL GRACE/GRACE-FO Mascon solutions via PO.DAAC"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
-notes: >
-  Legacy grace.jpl.nasa.gov product pages returned 404 on 2026-06-29; PO.DAAC is
-  the current canonical distribution path for this mascon release.
+attribution: NASA JPL GRACE/GRACE-FO Mascon solutions via PO.DAAC
+notes: |
+  Legacy grace.jpl.nasa.gov product pages returned 404 on 2026-06-29; PO.DAAC is the current canonical distribution path for this mascon release.

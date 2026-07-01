@@ -1,33 +1,45 @@
 id: copernicus-era5-reanalysis
+type: dataset
 title: ERA5 Reanalysis (single levels)
-description: >
-  Fifth-generation ECMWF global atmospheric reanalysis at ~31 km resolution,
-  hourly from 1940 to near-present. The standard open reanalysis for weather
-  and climate research when a consistent gridded product is needed.
+description: |
+  Fifth-generation ECMWF global atmospheric reanalysis at ~31 km resolution, hourly from 1940 to near-present. The standard open reanalysis for weather and climate research when a consistent gridded product is needed.
 publisher: Copernicus Climate Change Service (C3S) / ECMWF
-topics: [reanalysis, atmosphere, temperature, precipitation, wind]
+topics:
+- reanalysis
+- atmosphere
+- temperature
+- precipitation
+- wind
 source:
   canonical_url: https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels
-  former_climate_gov_url: null
-  doi: "10.24381/cds.adbb2d47"
+  identifiers:
+    doi: 10.24381/cds.adbb2d47
 access:
-  method: [web, api, bulk]
+  method:
+  - web
+  - api
+  - bulk
   auth_required: true
-  auth_note: "Free Copernicus Climate Data Store account required"
-  rate_limit: "CDS queue-based retrieval; see CDS fair-use policy"
-format: [netcdf, grib]
+  auth_note: Free Copernicus Climate Data Store account required
+  rate_limit: CDS queue-based retrieval; see CDS fair-use policy
+format:
+- netcdf
+- grib
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global
-  temporal: "1940-present"
+  temporal: 1940-present
   cadence: irregular
-license: "Copernicus Licence (free for research and commercial use with attribution)"
-attribution: "Copernicus Climate Change Service (C3S) (2025): ERA5 reanalysis. ECMWF."
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
-notes: >
+license: Copernicus Licence (free for research and commercial use with attribution)
+attribution: 'Copernicus Climate Change Service (C3S) (2025): ERA5 reanalysis. ECMWF.'
+notes: |
   Native hourly fields; catalogue also offers monthly aggregates.

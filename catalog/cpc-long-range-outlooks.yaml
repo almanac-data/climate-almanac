@@ -1,34 +1,43 @@
 id: cpc-long-range-outlooks
+type: dataset
 title: CPC Long-Lead Climate Outlooks
-description: >
-  NOAA Climate Prediction Center seasonal and long-lead outlooks for temperature,
-  precipitation, and drought across the United States. Operational guidance
-  products for planners and researchers tracking climate variability.
+description: |
+  NOAA Climate Prediction Center seasonal and long-lead outlooks for temperature, precipitation, and drought across the United States. Operational guidance products for planners and researchers tracking climate variability.
 publisher: NOAA Climate Prediction Center (CPC)
-topics: [forecasts, seasonal, precipitation, temperature, drought]
+topics:
+- forecasts
+- seasonal
+- precipitation
+- temperature
+- drought
 source:
   canonical_url: https://www.cpc.ncep.noaa.gov/products/predictions/long_range/
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [gif, png, txt]
+format:
+- gif
+- png
+- txt
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: United States (CONUS-focused products)
-  temporal: "operational; archives vary by product"
+  temporal: operational; archives vary by product
   cadence: monthly
 license: public-domain (US Gov work)
-attribution: "NOAA/NWS Climate Prediction Center"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
-notes: >
-  Parent /products/predictions/ path returned HTTP 403 to automated probes but
-  this long-range subdirectory responded 200 on 2026-06-29.
+attribution: NOAA/NWS Climate Prediction Center
+notes: |
+  Parent /products/predictions/ path returned HTTP 403 to automated probes but this long-range subdirectory responded 200 on 2026-06-29.

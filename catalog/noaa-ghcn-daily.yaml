@@ -1,34 +1,45 @@
 id: noaa-ghcn-daily
+type: dataset
 title: Global Historical Climatology Network — Daily (GHCN-Daily)
-description: >
-  Daily station observations of temperature, precipitation, and snow for tens of
-  thousands of land stations worldwide. The backbone of many global and regional
-  climate analyses and a primary input to gridded products.
+description: |
+  Daily station observations of temperature, precipitation, and snow for tens of thousands of land stations worldwide. The backbone of many global and regional climate analyses and a primary input to gridded products.
 publisher: NOAA NCEI
-topics: [temperature, precipitation, snow, stations, land]
+topics:
+- temperature
+- precipitation
+- snow
+- stations
+- land
 source:
   canonical_url: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
-  former_climate_gov_url: null
-  doi: "10.7289/V5D21VHZ"
+  identifiers:
+    doi: 10.7289/V5D21VHZ
 access:
-  method: [web, bulk, ftp]
+  method:
+  - web
+  - bulk
+  - ftp
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [csv, txt]
+format:
+- csv
+- txt
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global (land stations)
-  temporal: "1763-present (station-dependent)"
+  temporal: 1763-present (station-dependent)
   cadence: daily
 license: public-domain (US Gov work)
-attribution: "NOAA National Centers for Environmental Information, GHCN-Daily"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
-notes: >
-  Bulk files are served under /data/global-historical-climatology-network-daily/.
-  Station metadata and documentation ship with the download bundles.
+attribution: NOAA National Centers for Environmental Information, GHCN-Daily
+notes: |
+  Bulk files are served under /data/global-historical-climatology-network-daily/. Station metadata and documentation ship with the download bundles.

@@ -86,9 +86,9 @@ class GitHub:
             except urllib.error.HTTPError as e:
                 if e.code < 500:
                     raise
-                last_err = e
+                last_err = e  # transient server error — retry
             except urllib.error.URLError as e:
-                last_err = e
+                last_err = e  # network blip — retry
             time.sleep(2 * (attempt + 1))
         raise last_err
 
@@ -100,6 +100,8 @@ class GitHub:
                 self._req("POST", f"/repos/{self.repo}/labels",
                           {"name": name, "color": color, "description": desc})
             except urllib.error.HTTPError as e:
+                # 422 = already exists. Don't crash the whole monitor if label
+                # setup hits a transient error or perms issue — it's best-effort.
                 if e.code != 422:
                     print(f"warning: could not ensure label {name!r}: HTTP {e.code}", file=sys.stderr)
             except urllib.error.URLError as e:
@@ -163,9 +165,9 @@ def _entry_issue_body(r: dict, today: str) -> str:
         f"- **Probe note:** {r['note']}\n\n"
         "### What to do\n"
         f"Verify the source, then update `catalog/{r['id']}.yaml`:\n"
-        "- If it moved, set `status: moved` and update `source.canonical_url`.\n"
+        "- If it moved, set `status: moved` or `redirected` and update `source.canonical_url`.\n"
         "- If it is gone, set `status: dark`, add a `notes` line and "
-        "`archive.wayback_url`.\n"
+        "a `recovery[]` candidate (e.g. `via: wayback`).\n"
         "- If it is a transient blip, no change — this issue auto-closes when the "
         "probe succeeds again.\n\n"
         "_Opened automatically from the daily reachability probe "

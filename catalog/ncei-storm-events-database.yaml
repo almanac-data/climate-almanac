@@ -1,32 +1,39 @@
 id: ncei-storm-events-database
+type: dataset
 title: NOAA Storm Events Database
-description: >
-  Official record of severe storms and significant weather phenomena across the
-  United States, with fatalities, injuries, and property damage. Widely used for
-  hazard climatology and disaster research.
+description: |
+  Official record of severe storms and significant weather phenomena across the United States, with fatalities, injuries, and property damage. Widely used for hazard climatology and disaster research.
 publisher: NOAA NCEI
-topics: [storms, severe-weather, hazards, united-states]
+topics:
+- storms
+- severe-weather
+- hazards
+- united-states
 source:
   canonical_url: https://www.ncei.noaa.gov/stormevents/
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [csv]
+format:
+- csv
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: United States
-  temporal: "1950-present"
+  temporal: 1950-present
   cadence: event
 license: public-domain (US Gov work)
-attribution: "NOAA National Centers for Environmental Information, Storm Events Database"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: NOAA National Centers for Environmental Information, Storm Events Database
 notes: null

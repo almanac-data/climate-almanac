@@ -1,34 +1,46 @@
 id: noaa-climate-at-a-glance
+type: dataset
 title: Climate at a Glance — Global & National Time Series
-description: >
-  Monthly temperature and precipitation anomalies for the globe, nations, US
-  regions, states, and counties. NCEI's flagship public-facing trend product;
-  the source behind most "warmest year on record" reporting.
+description: |
+  Monthly temperature and precipitation anomalies for the globe, nations, US regions, states, and counties. NCEI's flagship public-facing trend product; the source behind most "warmest year on record" reporting.
 publisher: NOAA NCEI
-topics: [temperature, precipitation, anomalies, trends]
+topics:
+- temperature
+- precipitation
+- anomalies
+- trends
 source:
   canonical_url: https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
-  former_climate_gov_url: https://www.climate.gov/maps-data/dataset/climate-glance-global-temperature
-  doi: null
 access:
-  method: [web, api]
+  method:
+  - web
+  - api
   auth_required: false
   auth_note: null
-  rate_limit: "NCEI access API, no published hard limit; be polite"
-format: [csv, json]
+  rate_limit: NCEI access API, no published hard limit; be polite
+format:
+- csv
+- json
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/2026*/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
+  authenticity: asserted
+  permission: ok
+status: live
+status_since: '2026-06-28'
+status_source: auto
+observed:
+  checked: '2026-06-28'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global, national, US state/county
-  temporal: "1850-present (global); 1895-present (US)"
+  temporal: 1850-present (global); 1895-present (US)
   cadence: monthly
 license: public-domain (US Gov work)
-attribution: "NOAA National Centers for Environmental Information, Climate at a Glance"
-archive:
-  wayback_url: https://web.archive.org/web/2026*/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-28"
-checksum: null
-notes: >
-  Core dataset — high priority to keep mapped. Time series are small (CSV per
-  region) and would be cheap to mirror if it ever darkens.
+attribution: NOAA National Centers for Environmental Information, Climate at a Glance
+notes: |
+  Core dataset — high priority to keep mapped. Time series are small (CSV per region) and would be cheap to mirror if it ever darkens.

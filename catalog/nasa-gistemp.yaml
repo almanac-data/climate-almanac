@@ -1,32 +1,41 @@
 id: nasa-gistemp
+type: dataset
 title: GISS Surface Temperature Analysis (GISTEMP v4)
-description: >
-  NASA's global land–ocean surface temperature anomaly product, widely cited in
-  annual global temperature reporting. Gridded anomalies and station-based
-  analysis with open data files and documented methods.
+description: |
+  NASA's global land–ocean surface temperature anomaly product, widely cited in annual global temperature reporting. Gridded anomalies and station-based analysis with open data files and documented methods.
 publisher: NASA Goddard Institute for Space Studies (GISS)
-topics: [temperature, anomalies, global, trends]
+topics:
+- temperature
+- anomalies
+- global
+- trends
 source:
   canonical_url: https://data.giss.nasa.gov/gistemp/
-  former_climate_gov_url: https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [txt, csv, netcdf]
+format:
+- txt
+- csv
+- netcdf
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global
-  temporal: "1880-present"
+  temporal: 1880-present
   cadence: monthly
 license: public-domain (US Gov work)
-attribution: "NASA GISS Surface Temperature Analysis (GISTEMP Team, 2025)"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: NASA GISS Surface Temperature Analysis (GISTEMP Team, 2025)
 notes: null

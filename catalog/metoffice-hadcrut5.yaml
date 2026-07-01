@@ -1,32 +1,42 @@
 id: metoffice-hadcrut5
+type: dataset
 title: HadCRUT5 Global Temperature Dataset
-description: >
-  Met Office Hadley Centre / UEA CRU gridded near-surface temperature anomalies
-  on a 5° grid. One of the long-running global temperature records used in IPCC
-  assessments alongside NASA and NOAA products.
+description: |
+  Met Office Hadley Centre / UEA CRU gridded near-surface temperature anomalies on a 5° grid. One of the long-running global temperature records used in IPCC assessments alongside NASA and NOAA products.
 publisher: UK Met Office Hadley Centre / Climatic Research Unit
-topics: [temperature, anomalies, global, gridded]
+topics:
+- temperature
+- anomalies
+- global
+- gridded
 source:
   canonical_url: https://www.metoffice.gov.uk/hadobs/hadcrut5/
-  former_climate_gov_url: null
-  doi: "10.1029/2020JD032299"
+  identifiers:
+    doi: 10.1029/2020JD032299
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [netcdf, csv]
+format:
+- netcdf
+- csv
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global
-  temporal: "1850-present"
+  temporal: 1850-present
   cadence: monthly
-license: "Open Government Licence v3.0 (UK Met Office data)"
-attribution: "HadCRUT5 — Met Office Hadley Centre / University of East Anglia"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+license: Open Government Licence v3.0 (UK Met Office data)
+attribution: HadCRUT5 — Met Office Hadley Centre / University of East Anglia
 notes: null

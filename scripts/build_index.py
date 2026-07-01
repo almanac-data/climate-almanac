@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build catalog.json from every catalog/*.yaml entry.
 
-The JSON index is the machine-readable artifact downstream tools consume.
-Deterministic output (sorted by id) so diffs stay clean.
+Deterministic output (sorted by id) so diffs stay clean. The index name and
+description come from almanac.config.yml so this engine stays domain-agnostic.
 """
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "catalog"
+CONFIG = ROOT / "almanac.config.yml"
 OUT = ROOT / "catalog.json"
 
 
@@ -27,7 +28,14 @@ def _stringify_dates(obj):
     return obj
 
 
+def _config() -> dict:
+    if CONFIG.exists():
+        return yaml.safe_load(CONFIG.read_text()) or {}
+    return {}
+
+
 def main() -> int:
+    cfg = _config()
     entries = [
         _stringify_dates(yaml.safe_load(p.read_text()))
         for p in sorted(CATALOG.glob("*.yaml"))
@@ -35,8 +43,8 @@ def main() -> int:
     entries.sort(key=lambda e: e.get("id", ""))
 
     index = {
-        "name": "Climate Almanac",
-        "description": "An open, versioned index of public climate data.",
+        "name": cfg.get("name", "Almanac"),
+        "description": cfg.get("description", "An open, versioned index of public data."),
         "count": len(entries),
         "by_status": _counts(entries, "status"),
         "entries": entries,

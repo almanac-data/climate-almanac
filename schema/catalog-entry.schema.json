@@ -1,143 +1,110 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://climatealmanac.com/schema/catalog-entry.schema.json",
-  "title": "Climate dataset catalog entry",
-  "description": "One curated entry describing a public climate dataset: what it is, where it canonically lives, how to access it, where it is archived, and whether it is still reachable. The catalog maps data; it does not host it.",
+  "$id": "https://almanac-data.github.io/schema/catalog-entry.v2.schema.json",
+  "title": "Almanac resource catalog entry (v2)",
+  "description": "One curated entry describing a public resource — a dataset, paper, textbook, or document — its canonical home, how to access it, whether it is still reachable, and where the original can be recovered. The catalog maps resources; it does not host them. v2 generalizes v1 from datasets to any monitored resource and adds the monitor/recovery model documented in SCHEMA-V2.md. Non-breaking sibling of catalog-entry.schema.json (v1); cutover + migration are follow-ups.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "id",
-    "title",
-    "description",
-    "publisher",
-    "topics",
-    "source",
-    "access",
-    "license",
-    "attribution",
-    "status",
-    "last_checked"
-  ],
+  "required": ["id","type","title","description","publisher","topics","source","access","status","observed","license","attribution"],
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "Stable kebab-case slug. Must match the filename (minus .yaml). Never reused.",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-    },
-    "title": {
-      "type": "string",
-      "minLength": 3,
-      "description": "Human-readable dataset name."
-    },
-    "description": {
-      "type": "string",
-      "minLength": 20,
-      "description": "One or two sentences: what the dataset is and why it matters."
-    },
-    "publisher": {
-      "type": "string",
-      "description": "Authoritative producer, e.g. 'NOAA NCEI', 'NSIDC', 'NOAA CPC'."
-    },
-    "topics": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "type": "string" },
-      "description": "Free-tag topics for discovery, e.g. [temperature, sea-ice, anomalies]."
-    },
+    "id": { "type": "string", "description": "Stable kebab-case slug. Must match the filename (minus .yaml). Never reused.", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "type": { "enum": ["dataset","paper","textbook","document"], "description": "Resource kind. The discriminator that lets one schema hold a dataset and a paper identically; verticals become tags, not separate machines." },
+    "title": { "type": "string", "minLength": 3, "description": "Human-readable resource name." },
+    "description": { "type": "string", "minLength": 20, "description": "One or two sentences: what the resource is and why it matters." },
+    "publisher": { "type": "string", "description": "Authoritative producer — the agency, institution, or venue that publishes the resource. Reference-piece only; carries NO weight in recovery ranking." },
+    "topics": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Free-tag topics for discovery." },
+    "collection": { "type": ["string","null"], "description": "Optional id of a derived collection grouping entries that share a verifiable trait (a domain, a dark-date). A collection is a view, never a monitored entity; its health is computed from members, never stored." },
     "source": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["canonical_url"],
+      "type": "object", "additionalProperties": false, "required": ["canonical_url"],
+      "description": "The reference piece: where the resource canonically lives. Authority lives here and ONLY here.",
       "properties": {
-        "canonical_url": {
-          "type": "string",
-          "format": "uri",
-          "description": "Current authoritative home of the data."
-        },
-        "former_climate_gov_url": {
-          "type": ["string", "null"],
-          "format": "uri",
-          "description": "Where climate.gov used to surface it, if known. Null if N/A."
-        },
-        "doi": {
-          "type": ["string", "null"],
-          "description": "Dataset DOI if one exists."
+        "canonical_url": { "type": "string", "format": "uri", "description": "Current authoritative home of the resource." },
+        "identifiers": {
+          "type": "object",
+          "description": "Type-agnostic identifier map (replaces v1 source.doi). Known schemes typed; other schemes permitted.",
+          "properties": {
+            "doi": { "type": ["string","null"] },
+            "arxiv": { "type": ["string","null"] },
+            "pmid": { "type": ["string","null"] },
+            "isbn": { "type": ["string","null"] },
+            "handle": { "type": ["string","null"] }
+          },
+          "additionalProperties": { "type": ["string","null"] }
         }
       }
     },
     "access": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["method", "auth_required"],
+      "type": "object", "additionalProperties": false, "required": ["method","auth_required"],
       "properties": {
-        "method": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "enum": ["web", "api", "bulk", "s3", "ftp"] },
-          "description": "How the data is actually retrieved."
-        },
+        "method": { "type": "array", "minItems": 1, "items": { "enum": ["web","api","bulk","s3","ftp"] }, "description": "How the resource is actually retrieved." },
         "auth_required": { "type": "boolean" },
-        "auth_note": {
-          "type": ["string", "null"],
-          "description": "What credential is needed, e.g. 'free NCEI CDO token'."
-        },
-        "rate_limit": {
-          "type": ["string", "null"],
-          "description": "Documented rate limit, free text."
-        }
+        "auth_note": { "type": ["string","null"], "description": "What credential is needed, e.g. 'free API token'." },
+        "rate_limit": { "type": ["string","null"], "description": "Documented rate limit, free text." }
       }
     },
-    "format": {
+    "format": { "type": "array", "items": { "type": "string" }, "description": "File/serialization formats offered, e.g. [csv, json, netcdf, pdf]." },
+    "fingerprint": {
+      "type": "object", "additionalProperties": false,
+      "description": "Monitor baseline captured WHILE the resource was live. Absent/null for entries cataloged after the resource died — that is honest, not a defect (honest tiers, no fiat). What makes monitoring catch silent revision a 200-check misses.",
+      "properties": {
+        "sha256": { "type": ["string","null"], "description": "Hash of the canonical artifact as last seen live." },
+        "etag": { "type": ["string","null"], "description": "Cheap pre-check before re-hashing." },
+        "content_length": { "type": ["integer","null"] },
+        "captured": { "type": ["string","null"], "format": "date", "description": "ISO date the baseline was captured." },
+        "algo": { "type": "string", "default": "sha256" }
+      }
+    },
+    "observed": {
+      "type": "object", "additionalProperties": false, "required": ["checked"],
+      "description": "Pure machine facts from the last probe. No interpretation — the machine records facts here and never assigns a lifecycle label.",
+      "properties": {
+        "checked": { "type": "string", "format": "date", "description": "ISO date the resource was last probed (replaces v1 last_checked)." },
+        "reachable": { "type": ["boolean","null"], "description": "Did the probe get any response?" },
+        "http_status": { "type": ["integer","null"], "description": "HTTP status of the final response." },
+        "final_url": { "type": ["string","null"], "format": "uri", "description": "Where the probe actually landed. Differs from source.canonical_url on redirect — the highest-signal monitoring fact." },
+        "redirect_chain": { "type": "array", "items": { "type": "string", "format": "uri" }, "description": "Ordered redirect hops observed." },
+        "fingerprint_result": { "enum": ["match","drift","no-baseline"], "description": "Comparison of the probed artifact against fingerprint.sha256." }
+      }
+    },
+    "status": { "enum": ["live","revised","moved","redirected","superseded","dark","frozen"], "description": "Derived lifecycle label; auditable against `observed`; human-overridable. live=present & current; revised=same URL, content drifted; moved=relocated, content verified equivalent (needs baseline); redirected=lands elsewhere, equivalence unverified (honest default); superseded=URL serves different content, original gone-in-place; dark=unreachable/404; frozen=reachable but publisher-declared static." },
+    "status_since": { "type": ["string","null"], "format": "date", "description": "ISO date the CURRENT status was first observed — the catalog's analog of Willow's invalid_at. With `status`, the (state, boundary) pair: a record is time-bounded, never silently deleted." },
+    "status_source": { "enum": ["auto","curator"], "description": "Who assigned the current status. Curator overrides are themselves a visible fact." },
+    "recovery": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "File/serialization formats offered, e.g. [csv, json, netcdf, geotiff]."
+      "description": "Ranked list of where the ORIGINAL resource can be retrieved. Ranked by verifiable authenticity, NEVER by who runs the source. Authority (the publisher) appears nowhere here.",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["via","url","authenticity"],
+        "properties": {
+          "via": { "type": "string", "description": "Recovery channel, e.g. wayback, cloud_mirror, repository, community, predecessor, self." },
+          "url": { "type": "string", "format": "uri" },
+          "authenticity": { "enum": ["hash-verified","cross-archive","timestamped","asserted"], "description": "Verifiable fidelity tier. hash-verified=matches our baseline; cross-archive=>=2 independent archives agree; timestamped=one archive dated before loss; asserted=someone says so. Never promote a lower tier by fiat." },
+          "permission": { "enum": ["ok","review","excluded"], "default": "ok", "description": "The gate, not a rank. excluded=retained for audit but NEVER surfaced or ranked. Impermissible copies are filtered, not down-ranked." },
+          "captured": { "type": ["string","null"], "format": "date", "description": "Archive capture date, where known." },
+          "notes": { "type": ["string","null"] }
+        }
+      }
     },
     "coverage": {
-      "type": "object",
-      "additionalProperties": false,
+      "type": "object", "additionalProperties": false,
+      "description": "Type-specific (dataset/document). Only the block matching `type` is expected; absence is a soft warning, not a failure.",
       "properties": {
-        "spatial": { "type": "string", "description": "e.g. global, CONUS, Arctic." },
+        "spatial": { "type": "string", "description": "e.g. global, national, a named region." },
         "temporal": { "type": "string", "description": "e.g. '1850-present'." },
-        "cadence": {
-          "enum": ["daily", "weekly", "monthly", "seasonal", "annual", "event", "static", "irregular"],
-          "description": "Update frequency."
-        }
+        "cadence": { "enum": ["daily","weekly","monthly","quarterly","seasonal","annual","event","static","irregular"] }
       }
     },
-    "license": {
-      "type": "string",
-      "description": "e.g. 'public-domain (US Gov work)', 'CC-BY-4.0'."
-    },
-    "attribution": {
-      "type": "string",
-      "description": "Required attribution string for redistribution."
-    },
-    "archive": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Where copies live, beyond the canonical source.",
+    "bibliographic": {
+      "type": "object", "additionalProperties": false,
+      "description": "Type-specific (paper/textbook). The counterpart to `coverage`.",
       "properties": {
-        "wayback_url": { "type": ["string", "null"], "format": "uri" },
-        "noaa_s3": { "type": ["string", "null"], "description": "AWS Open Data path if mirrored there." },
-        "mirror": { "type": ["string", "null"], "description": "Populated ONLY if this project hosts a copy." }
+        "authors": { "type": "array", "items": { "type": "string" } },
+        "published": { "type": ["string","null"], "format": "date" },
+        "venue": { "type": ["string","null"] },
+        "version": { "type": ["string","null"] }
       }
     },
-    "status": {
-      "enum": ["live", "moved", "dark", "frozen", "mirrored"],
-      "description": "live=reachable & maintained; moved=URL changed; dark=gone/404; frozen=reachable but no longer updated; mirrored=we hold a copy."
-    },
-    "last_checked": {
-      "type": "string",
-      "format": "date",
-      "description": "ISO date the status was last verified (YYYY-MM-DD). The reachability checker writes this back."
-    },
-    "checksum": {
-      "type": ["string", "null"],
-      "description": "Checksum of a mirrored artifact, if archive.mirror is set."
-    },
-    "notes": {
-      "type": ["string", "null"],
-      "description": "Curator notes: caveats, history, why status changed."
-    }
+    "license": { "type": "string", "description": "e.g. 'public-domain (US Gov work)', 'CC-BY-4.0'." },
+    "attribution": { "type": "string", "description": "Required attribution string for redistribution." },
+    "notes": { "type": ["string","null"], "description": "Curator notes: caveats, history, why status changed." }
   }
 }

@@ -1,32 +1,41 @@
 id: ncei-climate-data-online
+type: dataset
 title: NOAA Climate Data Online (CDO)
-description: >
-  Searchable archive and API for NOAA/NCEI station, radar, and derived climate
-  datasets. The general-purpose access path for many NCEI holdings beyond
-  single-product landing pages.
+description: |
+  Searchable archive and API for NOAA/NCEI station, radar, and derived climate datasets. The general-purpose access path for many NCEI holdings beyond single-product landing pages.
 publisher: NOAA NCEI
-topics: [stations, api, archive, metadata]
+topics:
+- stations
+- api
+- archive
+- metadata
 source:
   canonical_url: https://www.ncei.noaa.gov/cdo-web/
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, api, bulk]
+  method:
+  - web
+  - api
+  - bulk
   auth_required: true
-  auth_note: "Free NCEI token required for API access"
-  rate_limit: "5 requests per second; 10,000 requests per day (documented CDO limits)"
-format: [json, csv]
+  auth_note: Free NCEI token required for API access
+  rate_limit: 5 requests per second; 10,000 requests per day (documented CDO limits)
+format:
+- json
+- csv
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global (dataset-dependent)
-  temporal: "dataset-dependent"
+  temporal: dataset-dependent
   cadence: irregular
 license: public-domain (US Gov work)
-attribution: "NOAA National Centers for Environmental Information, Climate Data Online"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: NOAA National Centers for Environmental Information, Climate Data Online
 notes: null

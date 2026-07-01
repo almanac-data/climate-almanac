@@ -1,32 +1,40 @@
 id: noaa-gml-co2-trends
+type: dataset
 title: Global Monitoring Laboratory — CO₂ Trends
-description: >
-  Atmospheric carbon dioxide measurements from the Mauna Loa and global in situ
-  network, including the iconic Keeling Curve. The reference time series for
-  anthropogenic CO₂ increase in public communication and research.
+description: |
+  Atmospheric carbon dioxide measurements from the Mauna Loa and global in situ network, including the iconic Keeling Curve. The reference time series for anthropogenic CO₂ increase in public communication and research.
 publisher: NOAA Global Monitoring Laboratory (GML)
-topics: [carbon-dioxide, greenhouse-gases, atmosphere, trends]
+topics:
+- carbon-dioxide
+- greenhouse-gases
+- atmosphere
+- trends
 source:
   canonical_url: https://gml.noaa.gov/ccgg/trends/
-  former_climate_gov_url: https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide
-  doi: null
 access:
-  method: [web, bulk]
+  method:
+  - web
+  - bulk
   auth_required: false
   auth_note: null
   rate_limit: null
-format: [txt, csv]
+format:
+- txt
+- csv
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: global (in situ sites; Mauna Loa flagship)
-  temporal: "1958-present (Mauna Loa); varies by site"
+  temporal: 1958-present (Mauna Loa); varies by site
   cadence: monthly
 license: public-domain (US Gov work)
-attribution: "NOAA Global Monitoring Laboratory, Carbon Cycle Greenhouse Gases"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: NOAA Global Monitoring Laboratory, Carbon Cycle Greenhouse Gases
 notes: null

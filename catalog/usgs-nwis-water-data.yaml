@@ -1,32 +1,43 @@
 id: usgs-nwis-water-data
+type: dataset
 title: USGS National Water Information System (NWIS)
-description: >
-  Real-time and historical streamflow, groundwater, water quality, and related
-  measurements from USGS monitoring networks. The primary federal portal for US
-  hydrologic observations used in drought, flood, and climate-impact studies.
+description: |
+  Real-time and historical streamflow, groundwater, water quality, and related measurements from USGS monitoring networks. The primary federal portal for US hydrologic observations used in drought, flood, and climate-impact studies.
 publisher: U.S. Geological Survey (USGS)
-topics: [hydrology, streamflow, groundwater, water-quality, united-states]
+topics:
+- hydrology
+- streamflow
+- groundwater
+- water-quality
+- united-states
 source:
   canonical_url: https://waterdata.usgs.gov/nwis
-  former_climate_gov_url: null
-  doi: null
 access:
-  method: [web, api, bulk]
+  method:
+  - web
+  - api
+  - bulk
   auth_required: false
   auth_note: null
-  rate_limit: "Documented NWIS web service limits; be polite"
-format: [rdb, json, xml]
+  rate_limit: Documented NWIS web service limits; be polite
+format:
+- rdb
+- json
+- xml
+status: live
+status_since: '2026-06-29'
+status_source: auto
+observed:
+  checked: '2026-06-29'
+  reachable: null
+  http_status: null
+  final_url: null
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: United States and territories
-  temporal: "site-dependent; many decades"
+  temporal: site-dependent; many decades
   cadence: irregular
 license: public-domain (US Gov work)
-attribution: "U.S. Geological Survey National Water Information System"
-archive:
-  wayback_url: null
-  noaa_s3: null
-  mirror: null
-status: live
-last_checked: "2026-06-29"
-checksum: null
+attribution: U.S. Geological Survey National Water Information System
 notes: null
