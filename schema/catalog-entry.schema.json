@@ -12,6 +12,14 @@
     "title": { "type": "string", "minLength": 3, "description": "Human-readable resource name." },
     "description": { "type": "string", "minLength": 20, "description": "One or two sentences: what the resource is and why it matters." },
     "publisher": { "type": "string", "description": "Authoritative producer — the agency, institution, or venue that publishes the resource. Reference-piece only; carries NO weight in recovery ranking." },
+    "jurisdiction": {
+      "type": "object", "additionalProperties": false,
+      "description": "Where authority for this resource sits — reference-piece metadata only, alongside publisher; carries NO weight in recovery ranking. Lets national vs. regional-bloc vs. multilateral vs. international-ngo sources be counted, not just eyeballed from free-text coverage.spatial.",
+      "properties": {
+        "scope": { "enum": ["national","regional-bloc","multilateral","international-ngo"], "description": "national=a single country's own agency; regional-bloc=a supranational body such as the EU/Eurostat; multilateral=a UN or Bretton-Woods body with broad member-state governance; international-ngo=a non-treaty international organization." },
+        "country": { "type": ["string","null"], "description": "ISO 3166-1 alpha-2 code for national scope (e.g. 'US', 'JP'). Null for regional-bloc, multilateral, and international-ngo." }
+      }
+    },
     "topics": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Free-tag topics for discovery." },
     "collection": { "type": ["string","null"], "description": "Optional id of a derived collection grouping entries that share a verifiable trait (a domain, a dark-date). A collection is a view, never a monitored entity; its health is computed from members, never stored." },
     "source": {
