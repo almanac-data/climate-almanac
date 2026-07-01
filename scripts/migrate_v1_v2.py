@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# propagate-engine test marker — safe to remove, added to verify auto-PR fan-out.
 """Migrate catalog/*.yaml entries from schema v1 to v2 (see SCHEMA-V2.md).
 
 Mechanical field mapping only — see the table in SCHEMA-V2.md for the full
