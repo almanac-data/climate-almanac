@@ -92,10 +92,10 @@ class GitHub:
             time.sleep(2 * (attempt + 1))
         raise last_err
 
-    def ensure_labels(self) -> None:
+    def ensure_labels(self, labels: dict | None = None) -> None:
         if self.dry_run:
             return
-        for name, (color, desc) in LABELS.items():
+        for name, (color, desc) in (labels or LABELS).items():
             try:
                 self._req("POST", f"/repos/{self.repo}/labels",
                           {"name": name, "color": color, "description": desc})
@@ -107,8 +107,8 @@ class GitHub:
             except urllib.error.URLError as e:
                 print(f"warning: could not ensure label {name!r}: {e}", file=sys.stderr)
 
-    def open_automated_issues(self) -> list[dict]:
-        """All open issues carrying the endpoint-dead label (paginated).
+    def open_automated_issues(self, label: str = "endpoint-dead") -> list[dict]:
+        """All open issues carrying `label` (paginated).
 
         Returns [] when no token/repo is configured (offline --dry-run planning),
         so a local dry run shows the create plan without hitting the network.
@@ -119,7 +119,7 @@ class GitHub:
         page = 1
         while True:
             q = urllib.parse.urlencode(
-                {"state": "open", "labels": "endpoint-dead", "per_page": 100, "page": page}
+                {"state": "open", "labels": label, "per_page": 100, "page": page}
             )
             batch = self._req("GET", f"/repos/{self.repo}/issues?{q}")
             if not isinstance(batch, list) or not batch:
