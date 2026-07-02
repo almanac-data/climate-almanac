@@ -59,7 +59,9 @@
         "etag": { "type": ["string","null"], "description": "Cheap pre-check before re-hashing." },
         "content_length": { "type": ["integer","null"] },
         "captured": { "type": ["string","null"], "format": "date", "description": "ISO date the baseline was captured." },
-        "algo": { "type": "string", "default": "sha256" }
+        "algo": { "type": "string", "default": "sha256" },
+        "lead_hash": { "type": ["string","null"], "description": "Hash of a normalized lead signature (title + first ~500 chars of extracted text) as last seen live. A second, narrower fingerprint — robust to page churn (nav/ads/footer) that would drift the full sha256 without the actual claims changing. This is what lets a later drift be classified as cosmetic vs substantive without storing or hosting the page content itself (rule: catalog, don't host)." },
+        "lead_algo": { "type": "string", "default": "sha256" }
       }
     },
     "observed": {
@@ -71,7 +73,8 @@
         "http_status": { "type": ["integer","null"], "description": "HTTP status of the final response." },
         "final_url": { "type": ["string","null"], "format": "uri", "description": "Where the probe actually landed. Differs from source.canonical_url on redirect — the highest-signal monitoring fact." },
         "redirect_chain": { "type": "array", "items": { "type": "string", "format": "uri" }, "description": "Ordered redirect hops observed." },
-        "fingerprint_result": { "enum": ["match","drift","no-baseline"], "description": "Comparison of the probed artifact against fingerprint.sha256." }
+        "fingerprint_result": { "enum": ["match","drift","no-baseline"], "description": "Comparison of the probed artifact against fingerprint.sha256." },
+        "lead_result": { "enum": ["same","different","unverifiable"], "description": "Comparison of the probed page's lead signature against fingerprint.lead_hash. 'unverifiable' when no lead_hash baseline exists. A machine fact only — it feeds a proposed moved/superseded reclassification (scripts/check_revision_drift.py), it never assigns status itself." }
       }
     },
     "status": { "enum": ["live","revised","moved","redirected","superseded","dark","frozen"], "description": "Derived lifecycle label; auditable against `observed`; human-overridable. live=present & current; revised=same URL, content drifted; moved=relocated, content verified equivalent (needs baseline); redirected=lands elsewhere, equivalence unverified (honest default); superseded=URL serves different content, original gone-in-place; dark=unreachable/404; frozen=reachable but publisher-declared static." },
