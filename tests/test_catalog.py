@@ -249,3 +249,41 @@ def test_observed_reachable_follows_the_schema_not_the_flagging_rule():
                                      "http_status": code, "final_url": None,
                                      "redirect_chain": [], "fingerprint_result": "no-baseline"})
         assert _y.safe_load(block)["observed"]["reachable"] is expected
+
+
+def test_unreachable_host_is_not_reported_reachable(monkeypatch):
+    """curl prints "000" when it never got an HTTP response — that is not a status.
+
+    Regression: "000".isdigit() is True, so it parsed as 0, and `0 < 400` made a
+    source that had entirely vanished report as reachable and never flag. That is
+    the one outage this monitor exists to catch.
+    """
+    mod = _load_checker()
+
+    class _Proc:
+        returncode = 6  # curl: could not resolve host
+        stdout = "000\thttps://gone.example.gov/"
+        stderr = "curl: (6) Could not resolve host: gone.example.gov"
+
+    monkeypatch.setattr(mod.subprocess, "run", lambda *a, **k: _Proc())
+    probe = mod._curl("https://gone.example.gov/", 5, "ua")
+    assert probe.code is None, "a connection failure must not parse as HTTP 0"
+    assert "no response" in probe.note
+
+    # ...and the classification that hangs off it must call this dead, not ok.
+    code = probe.code
+    reachable = code is not None and code < 400
+    dead = (not reachable) and (code not in mod.BLOCK_CODES)
+    assert reachable is False and dead is True
+
+
+def test_a_real_http_status_still_parses(monkeypatch):
+    mod = _load_checker()
+
+    class _Proc:
+        returncode = 0
+        stdout = "404\thttps://agency.gov/gone"
+        stderr = ""
+
+    monkeypatch.setattr(mod.subprocess, "run", lambda *a, **k: _Proc())
+    assert mod._curl("https://agency.gov/gone", 5, "ua").code == 404
