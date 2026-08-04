@@ -286,3 +286,12 @@ genuinely open.)*
 5. **Still open:** decide whether the daily job auto-promotes `live` → `revised`/`superseded`/`dark`, or only
    *proposes* a status change via issue for curator confirmation (leaning: propose, never auto-write
    a lifecycle label — `status_source` stays `curator` for anything but the cleanest cases).
+
+   Half of this is now settled by construction. The daily job writes `observed` and opens a
+   PR (`monitor/observed-refresh`) rather than pushing to the default branch, and it touches
+   no lifecycle field: `status`, `status_source`, and `status_since` are never written by any
+   automation. So the *facts* are captured automatically and the *label* still is not. What
+   remains genuinely open is narrower than it was — whether a machine may ever propose a
+   status change on its own (an issue, a PR body, a label), and if so on what evidence.
+   `final_url` differing from `source.canonical_url` is the obvious first candidate, now that
+   anything records it at all.
