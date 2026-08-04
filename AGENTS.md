@@ -80,6 +80,13 @@ saw, a curator decides what it means. Rebuild the index in the same change.
 python scripts/check_links.py --write-observed && python scripts/build_index.py
 ```
 
+The daily `link-check` workflow does this for you and proposes the result as a
+`monitor/observed-refresh` PR. **That PR only opens automatically if the repo allows it** —
+*Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"*,
+which is off by default and which a workflow's `permissions:` block cannot grant. With it
+off the job still probes, still writes, and still pushes the branch; it just logs a warning
+with a compare link for a human to open the PR from. The data is never lost either way.
+
 To add a dataset: copy an existing `catalog/*.yaml`, fill every required field, validate,
 rebuild the index, open a PR. See `CONTRIBUTING.md` for the full checklist.
 
