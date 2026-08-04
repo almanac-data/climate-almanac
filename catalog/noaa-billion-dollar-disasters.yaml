@@ -35,8 +35,8 @@ status: frozen
 status_since: '2026-06-28'
 status_source: auto
 observed:
-  checked: '2026-06-28'
-  reachable: null
+  checked: '2026-08-04'
+  reachable: false
   http_status: null
   final_url: null
   redirect_chain: []

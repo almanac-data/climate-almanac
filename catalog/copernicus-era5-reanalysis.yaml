@@ -32,11 +32,12 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-06-29'
-  reachable: null
-  http_status: null
-  final_url: null
-  redirect_chain: []
+  checked: '2026-08-04'
+  reachable: true
+  http_status: 200
+  final_url: https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
+  redirect_chain:
+  - https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
   fingerprint_result: no-baseline
 coverage:
   spatial: global

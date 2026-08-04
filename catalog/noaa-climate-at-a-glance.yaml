@@ -33,10 +33,10 @@ status: live
 status_since: '2026-06-28'
 status_source: auto
 observed:
-  checked: '2026-06-28'
-  reachable: null
-  http_status: null
-  final_url: null
+  checked: '2026-08-04'
+  reachable: true
+  http_status: 503
+  final_url: https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
   redirect_chain: []
   fingerprint_result: no-baseline
 coverage:
