@@ -2,7 +2,13 @@
 """Reachability checker — the seed of automated monitoring.
 
 For each catalog entry, probes source.canonical_url and reports whether the
-declared `status` still matches reality. Read-only.
+declared `status` still matches reality.
+
+Read-only by default. With `--write-observed` it writes what it saw back into
+each entry's `observed` block — the only thing in this repo permitted to do so,
+because `observed` records machine facts and a hand-transcribed probe is not one.
+It never touches `status`, `status_source`, or `status_since`: the machine
+records facts, a human assigns the lifecycle label.
 
 User-Agent is built from almanac.config.yml (slug + homepage) so agencies can see
 who is checking. Three refinements keep the monitor from crying wolf at bot defenses:
@@ -26,10 +32,15 @@ Uses curl for reliable wall-clock timeouts.
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
+import hashlib
 import json
 import shutil
 import subprocess
+import tempfile
+
 from pathlib import Path
+from urllib.parse import urljoin
 
 import yaml
 
@@ -67,20 +78,72 @@ def _headless_default() -> bool:
 UA = _user_agent()
 
 
-def _curl(url: str, timeout: float, ua: str) -> tuple[int | None, str]:
-    cmd = ["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
-           "--max-time", str(int(timeout)), "-A", ua, "-L", url]
-    try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout + 5, check=False)
-    except subprocess.TimeoutExpired:
-        return None, f"timeout>{timeout + 5}s"
-    if proc.returncode != 0 and not proc.stdout.strip().isdigit():
-        err = (proc.stderr or proc.stdout or "curl failed").strip().splitlines()[-1]
-        return None, err[:120]
-    raw = proc.stdout.strip()
-    if not raw.isdigit():
-        return None, raw or "no status code"
-    return int(raw), ""
+class Probe:
+    """What a single probe actually saw. Facts only — no lifecycle interpretation.
+
+    A plain class rather than a dataclass: this module is loaded via
+    `importlib.util.module_from_spec` by the tests (and by anything else driving the
+    scripts directly), and `@dataclass` resolving `from __future__` string annotations
+    needs the module registered in `sys.modules`, which that loader does not do.
+    """
+
+    __slots__ = ("code", "note", "final_url", "redirect_chain")
+
+    def __init__(self, code, note="", final_url=None, redirect_chain=None):
+        self.code = code
+        self.note = note
+        self.final_url = final_url
+        self.redirect_chain = redirect_chain if redirect_chain is not None else []
+
+    def __iter__(self):
+        """Legacy 2-tuple unpacking: `code, note = probe`."""
+        return iter((self.code, self.note))
+
+    def __repr__(self):
+        return (f"Probe(code={self.code!r}, note={self.note!r}, "
+                f"final_url={self.final_url!r}, redirect_chain={self.redirect_chain!r})")
+
+
+def _redirect_chain(header_dump: str, start_url: str) -> list[str]:
+    """Ordered hops from the Location headers of a followed redirect chain.
+
+    Relative Locations are resolved against the URL that produced them, so the
+    chain is absolute URLs throughout — which is what `observed.redirect_chain`
+    is specified to hold.
+    """
+    chain: list[str] = []
+    current = start_url
+    for line in header_dump.splitlines():
+        if line.lower().startswith("location:"):
+            target = line.split(":", 1)[1].strip()
+            if not target:
+                continue
+            current = urljoin(current, target)
+            chain.append(current)
+    return chain
+
+
+def _curl(url: str, timeout: float, ua: str) -> Probe:
+    with tempfile.NamedTemporaryFile("w+", suffix=".hdr", delete=True) as hdr:
+        cmd = ["curl", "-sS", "-o", "/dev/null", "-D", hdr.name,
+               "-w", "%{http_code}\t%{url_effective}",
+               "--max-time", str(int(timeout)), "-A", ua, "-L", url]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True,
+                                  timeout=timeout + 5, check=False)
+        except subprocess.TimeoutExpired:
+            return Probe(None, f"timeout>{timeout + 5}s")
+        raw = proc.stdout.strip()
+        code_part, _, final_url = raw.partition("\t")
+        code_part = code_part.strip()
+        if proc.returncode != 0 and not code_part.isdigit():
+            err = (proc.stderr or proc.stdout or "curl failed").strip().splitlines()[-1]
+            return Probe(None, err[:120])
+        if not code_part.isdigit():
+            return Probe(None, raw or "no status code")
+        hdr.seek(0)
+        chain = _redirect_chain(hdr.read(), url)
+    return Probe(int(code_part), "", final_url.strip() or url, chain)
 
 
 def _probe_headless(url: str, timeout: float) -> tuple[int | None, str]:
@@ -108,27 +171,121 @@ def _probe_headless(url: str, timeout: float) -> tuple[int | None, str]:
         return None, f"headless {type(exc).__name__}"
 
 
-def _probe(url: str, timeout: float, headless: bool = False) -> tuple[int | None, str]:
+def _probe(url: str, timeout: float, headless: bool = False) -> Probe:
     """Probe with the almanac UA; retry as a browser, then (opt-in) as headless Chromium."""
     if not shutil.which("curl"):
         raise SystemExit("check_links.py requires curl on PATH")
-    code, note = _curl(url, timeout, UA)
-    if code in BLOCK_CODES:
-        bcode, bnote = _curl(url, timeout, BROWSER_UA)
-        if bcode is not None and bcode < 400:
-            return bcode, f"ok via browser-UA (almanac-UA got {code})"
-        c = bcode if bcode is not None else code
+    first = _curl(url, timeout, UA)
+    if first.code in BLOCK_CODES:
+        browser = _curl(url, timeout, BROWSER_UA)
+        if browser.code is not None and browser.code < 400:
+            browser.note = f"ok via browser-UA (almanac-UA got {first.code})"
+            return browser
+        best = browser if browser.code is not None else first
+        c = best.code
         if c in BLOCK_CODES:
             # curl can't beat CDN bot protection; try a real headless browser.
             if headless:
                 hcode, hnote = _probe_headless(url, timeout)
                 if hcode is not None and hcode < 400:
-                    return hcode, f"ok via headless (curl got {c})"
+                    # Headless reached it, but only curl reports the redirect chain,
+                    # so record the status without inventing hops we did not observe.
+                    return Probe(hcode, f"ok via headless (curl got {c})", url, [])
                 detail = f"; {hnote}" if hnote else ""
-                return c, f"blocked by bot protection ({c}) — headless unverified{detail}"
-            return c, f"blocked by bot protection ({c}) — cannot auto-verify"
-        return c, bnote or f"http {c}"
-    return code, note
+                best.note = f"blocked by bot protection ({c}) — headless unverified{detail}"
+                return best
+            best.note = f"blocked by bot protection ({c}) — cannot auto-verify"
+            return best
+        best.note = best.note or f"http {c}"
+        return best
+    return first
+
+
+def _body_sha256(url: str, timeout: float, ua: str, max_bytes: int = 100_000_000) -> str | None:
+    """Hash the fetched artifact. Returns None when it could not be fetched whole.
+
+    Only called for entries that already carry a `fingerprint.sha256` baseline, so
+    the cost of downloading a body is paid only where there is something to compare
+    against. A truncated download is never hashed — a partial hash would compare
+    unequal and manufacture a false `drift`.
+    """
+    with tempfile.NamedTemporaryFile(suffix=".body", delete=True) as body:
+        cmd = ["curl", "-sS", "-o", body.name, "--max-filesize", str(max_bytes),
+               "--max-time", str(int(timeout)), "-A", ua, "-L", url]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True,
+                                  timeout=timeout + 5, check=False)
+        except subprocess.TimeoutExpired:
+            return None
+        if proc.returncode != 0:  # includes 63 = --max-filesize exceeded
+            return None
+        return hashlib.sha256(Path(body.name).read_bytes()).hexdigest()
+
+
+def _fingerprint_result(entry: dict, probe: Probe, timeout: float) -> str | None:
+    """Compare the live artifact against the stored baseline.
+
+    Returns None to mean "not observed" — the caller then leaves whatever value is
+    already on the entry alone. Absent a baseline there is nothing to compare and
+    the honest answer is `no-baseline`, not a manufactured `match`.
+    """
+    baseline = ((entry.get("fingerprint") or {}).get("sha256"))
+    if not baseline:
+        return "no-baseline"
+    if probe.code is None or probe.code >= 400:
+        return None
+    digest = _body_sha256(entry["source"]["canonical_url"], timeout, UA)
+    if digest is None:
+        return None
+    return "match" if digest == baseline else "drift"
+
+
+def _scalar(key: str, value) -> str:
+    """One `key: value` line, quoted exactly as PyYAML would quote it."""
+    return yaml.safe_dump({key: value}, default_flow_style=False,
+                          sort_keys=False, allow_unicode=True).strip()
+
+
+def render_observed(observed: dict, indent: str = "  ") -> str:
+    """Render an `observed` block in the catalog's hand-written YAML style.
+
+    Written as text rather than dumped as YAML on purpose: round-tripping a whole
+    entry through PyYAML reflows every block scalar and re-quotes every string,
+    which would churn files this change has no business touching.
+    """
+    lines = ["observed:"]
+    for key in ("checked", "reachable", "http_status", "final_url"):
+        lines.append(indent + _scalar(key, observed.get(key)))
+    chain = observed.get("redirect_chain") or []
+    if chain:
+        lines.append(indent + "redirect_chain:")
+        rendered = yaml.safe_dump(chain, default_flow_style=False,
+                                  sort_keys=False, allow_unicode=True).strip()
+        lines.extend(indent + item for item in rendered.splitlines())
+    else:
+        lines.append(indent + "redirect_chain: []")
+    lines.append(indent + _scalar("fingerprint_result", observed.get("fingerprint_result")))
+    return "\n".join(lines)
+
+
+def replace_observed_block(text: str, block: str) -> str | None:
+    """Swap an entry's `observed:` block for `block`, leaving the rest byte-identical.
+
+    Returns None when the file has no `observed:` block — the schema requires one,
+    so that is a malformed entry to report rather than a file to guess at.
+    """
+    lines = text.splitlines()
+    try:
+        start = next(i for i, ln in enumerate(lines) if ln.rstrip() == "observed:")
+    except StopIteration:
+        return None
+    end = start + 1
+    while end < len(lines) and (lines[end].startswith((" ", "\t")) or not lines[end].strip()):
+        if not lines[end].strip() and end + 1 < len(lines) and not lines[end + 1].startswith((" ", "\t")):
+            break  # blank line separating top-level keys belongs to what follows
+        end += 1
+    trailing = "\n" if text.endswith("\n") else ""
+    return "\n".join(lines[:start] + block.splitlines() + lines[end:]) + trailing
 
 
 def main() -> int:
@@ -140,15 +297,21 @@ def main() -> int:
                     default=_headless_default(),
                     help="verify CDN-bot-blocked sources with a headless browser "
                          "(needs Playwright; defaults to reachability.headless in config)")
+    ap.add_argument("--write-observed", action="store_true",
+                    help="write the probe's facts back into each entry's `observed` block "
+                         "(status is never touched). Re-run build_index.py afterwards.")
     args = ap.parse_args()
 
+    today = _dt.date.today().isoformat()
     report = []
     problems = 0
+    written = 0
     for path in sorted(CATALOG.glob("*.yaml")):
         entry = yaml.safe_load(path.read_text())
         url = entry.get("source", {}).get("canonical_url")
         declared = entry.get("status")
-        code, note = _probe(url, args.timeout, headless=args.headless)
+        probe = _probe(url, args.timeout, headless=args.headless)
+        code, note = probe.code, probe.note
         blocked = code in BLOCK_CODES
         reachable = code is not None and code < 400
         # Dead = a definitive failure (404 / 5xx / connection / timeout).
@@ -159,7 +322,33 @@ def main() -> int:
             problems += 1
         report.append({"id": entry.get("id"), "url": url, "declared_status": declared,
                        "http": code, "reachable": reachable, "blocked": blocked,
-                       "flagged": flagged, "note": note})
+                       "flagged": flagged, "note": note,
+                       "final_url": probe.final_url, "redirect_chain": probe.redirect_chain})
+
+        if args.write_observed:
+            observed = dict(entry.get("observed") or {})
+            fp = _fingerprint_result(entry, probe, args.timeout)
+            observed.update({
+                "checked": today,
+                # The schema defines observed.reachable as "did the probe get any
+                # response?" — NOT "did it succeed". A bot-blocked 403 is a response,
+                # so it records reachable: true with http_status: 403. Collapsing those
+                # into false would relabel `blocked` as `dead`, which rung 3 exists to
+                # prevent. The local `reachable` below is the stricter <400 notion used
+                # only to decide whether a declared status looks wrong.
+                "reachable": code is not None,
+                "http_status": code,
+                "final_url": probe.final_url,
+                "redirect_chain": probe.redirect_chain,
+            })
+            if fp is not None:
+                observed["fingerprint_result"] = fp
+            updated = replace_observed_block(path.read_text(), render_observed(observed))
+            if updated is None:
+                print(f"  ! {path.name}: no `observed:` block to write — skipped")
+            elif updated != path.read_text():
+                path.write_text(updated)
+                written += 1
 
     if args.json:
         print(json.dumps(report, indent=2))
@@ -168,6 +357,9 @@ def main() -> int:
             mark = "FLAG" if r["flagged"] else ("blok" if r["blocked"] else ("ok  " if r["reachable"] else "warn"))
             print(f"[{mark}] {r['id']:34} status={r['declared_status']:8} http={r['http']}  {r['note']}")
         print(f"\n{problems} entr{'y' if problems == 1 else 'ies'} declared live/frozen but unreachable")
+    if args.write_observed:
+        print(f"wrote `observed` into {written} entr{'y' if written == 1 else 'ies'}"
+              " — run scripts/build_index.py to refresh catalog.json")
     return 1 if problems else 0
 
 
