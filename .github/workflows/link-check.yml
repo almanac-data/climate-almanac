@@ -80,6 +80,8 @@ jobs:
         if: always() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GH_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: |
           if git diff --quiet; then
             echo "observed unchanged — nothing to propose"
@@ -99,10 +101,21 @@ jobs:
           # Force-push the same branch every run so this stays one rolling PR
           # rather than a daily pile of near-identical ones.
           git push -f origin "$BRANCH"
-          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
-            gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" \
-              --title "chore(monitor): refresh observed from the daily probe" \
-              --body "$(cat <<'BODY'
+
+          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            echo "observed-refresh PR already open — branch updated in place"
+            exit 0
+          fi
+
+          # Opening the PR needs "Allow GitHub Actions to create and approve pull
+          # requests" (Settings -> Actions -> General). That is a repo/org toggle the
+          # workflow's `permissions:` block cannot grant, and it is off by default.
+          # When it is off we keep the branch — the probe's work is already pushed and
+          # safe — and tell a human to open the PR, rather than failing a job whose
+          # actual work succeeded. Enable the toggle and this becomes automatic.
+          if ! gh pr create --head "$BRANCH" --base "$DEFAULT_BRANCH" \
+                 --title "chore(monitor): refresh observed from the daily probe" \
+                 --body "$(cat <<'BODY'
           Opened automatically by `.github/workflows/link-check.yml`.
 
           `scripts/check_links.py --write-observed` recorded what the daily probe actually
@@ -117,7 +130,15 @@ jobs:
           This branch is force-pushed on every run, so this PR reflects the most recent
           probe rather than accumulating one PR per day. Review the diff, not the history.
           BODY
-          )"
-          else
-            echo "observed-refresh PR already open — branch updated in place"
+          )" 2>"$RUNNER_TEMP/pr-create.err"; then
+            cat "$RUNNER_TEMP/pr-create.err"
+            if grep -q "not permitted to create or approve pull requests" "$RUNNER_TEMP/pr-create.err"; then
+              echo "::warning::Branch $BRANCH is pushed with this probe's observed data, but"\
+                   "GitHub Actions may not open PRs in this repo. Open it here:"\
+                   "$GH_REPO_URL/compare/$DEFAULT_BRANCH...$BRANCH — or enable"\
+                   "Settings > Actions > General > Allow GitHub Actions to create and approve"\
+                   "pull requests to have this happen automatically."
+              exit 0
+            fi
+            exit 1
           fi
