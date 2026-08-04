@@ -11,10 +11,14 @@ on:
         type: boolean
         default: false
 
-# Needed so the alert step can open, update, and close issues.
+# issues:        the alert step opens, updates, and closes dead-link issues.
+# contents + pull-requests: the observed-refresh step pushes a branch and opens a PR.
+#                It never pushes to the default branch — machine facts still land
+#                through review, and `status` is never touched by any of this.
 permissions:
-  contents: read
+  contents: write
   issues: write
+  pull-requests: write
 
 jobs:
   check-links:
@@ -61,3 +65,59 @@ jobs:
         with:
           name: link-check-report
           path: link-check-report.json
+
+      # Record what the probe saw. This is the only automated writer of `observed`,
+      # and it writes facts only — `status`, `status_source`, and `status_since` are
+      # never touched (SCHEMA-V2.md open item 5: the machine proposes, a human disposes).
+      # Skipped on a dry run, and on schedule only for the default branch.
+      - name: Refresh observed from this probe
+        if: always() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        run: |
+          python scripts/check_links.py --write-observed || true
+          python scripts/build_index.py
+
+      - name: Open or update the observed-refresh PR
+        if: always() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "observed unchanged — nothing to propose"
+            exit 0
+          fi
+          BRANCH=monitor/observed-refresh
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add catalog catalog.json
+          git commit -m "chore(monitor): refresh observed from the $(date -u +%Y-%m-%d) probe
+
+          Written by scripts/check_links.py --write-observed. Facts only:
+          checked, reachable, http_status, final_url, redirect_chain, and
+          fingerprint_result where a baseline exists. status, status_source,
+          and status_since are untouched — reclassification stays a human call."
+          # Force-push the same branch every run so this stays one rolling PR
+          # rather than a daily pile of near-identical ones.
+          git push -f origin "$BRANCH"
+          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" \
+              --title "chore(monitor): refresh observed from the daily probe" \
+              --body "$(cat <<'BODY'
+          Opened automatically by `.github/workflows/link-check.yml`.
+
+          `scripts/check_links.py --write-observed` recorded what the daily probe actually
+          saw into each entry's `observed` block, and `catalog.json` was rebuilt to match.
+
+          **Facts only.** `status`, `status_source`, and `status_since` are untouched. A
+          redirect showing up in `final_url` or `redirect_chain` may well mean an entry
+          should be reclassified `redirected` / `moved` / `superseded` — that judgment is
+          yours to make in a separate change, which is what SCHEMA-V2.md open item 5 is
+          about.
+
+          This branch is force-pushed on every run, so this PR reflects the most recent
+          probe rather than accumulating one PR per day. Review the diff, not the history.
+          BODY
+          )"
+          else
+            echo "observed-refresh PR already open — branch updated in place"
+          fi
