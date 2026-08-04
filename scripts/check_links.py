@@ -141,9 +141,18 @@ def _curl(url: str, timeout: float, ua: str) -> Probe:
             return Probe(None, err[:120])
         if not code_part.isdigit():
             return Probe(None, raw or "no status code")
+        code = int(code_part)
+        if code == 0:
+            # curl prints "000" when it never got an HTTP response at all — DNS
+            # failure, connection refused, TLS failure, timeout. It is a digit, so
+            # it parses; treating it as a status makes `0 < 400` true and reports a
+            # source that has entirely vanished as reachable. That is the one
+            # outage this monitor exists to catch, so it must be "no response".
+            err = (proc.stderr or "").strip().splitlines()
+            return Probe(None, f"no response ({err[-1][:80]})" if err else "no response")
         hdr.seek(0)
         chain = _redirect_chain(hdr.read(), url)
-    return Probe(int(code_part), "", final_url.strip() or url, chain)
+    return Probe(code, "", final_url.strip() or url, chain)
 
 
 def _probe_headless(url: str, timeout: float) -> tuple[int | None, str]:
