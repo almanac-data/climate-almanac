@@ -15,9 +15,10 @@ decommissioned and the curation/reachability layer it provided was lost.
 
 **Catalog, don't host.** This repo maps data; it does not store data bytes. Do not add
 datasets, CSVs, NetCDF, GeoTIFFs, or any data payload to the repo. The *only* exception is
-a deliberate, small, at-risk artifact mirrored under an entry's `archive.mirror` field —
-and only after it's been discussed in an issue. If a task tempts you to commit data, stop:
-the answer is almost always a catalog entry pointing to where the data lives.
+a deliberate, small, at-risk artifact recorded as a `recovery[]` candidate — and only after
+it's been discussed in an issue. `recovery[]` *points* to a copy held elsewhere; it never
+holds one here. If a task tempts you to commit data, stop: the answer is almost always a
+catalog entry pointing to where the data lives.
 
 ## Repository map
 
@@ -27,10 +28,11 @@ catalog/<id>.yaml                  one curated dataset per file (source of truth
 catalog.json                       GENERATED build artifact — do not hand-edit
 scripts/validate.py                schema + filename==id + uniqueness checks (CI gate)
 scripts/build_index.py             catalog/*.yaml -> catalog.json
-scripts/check_links.py             reachability checker (read-only; reports, never rewrites)
+scripts/check_links.py             reachability checker (reports; writes `observed` only with --write-observed)
 scripts/alert_on_dead_links.py     turns a check_links report into GitHub issues (idempotent; circuit-breaker)
 .github/workflows/ci.yml           runs validate + a stale-index guard on every PR
-.github/workflows/link-check.yml   daily reachability probe -> auto-opens/closes dead-link issues
+.github/workflows/link-check.yml   daily reachability probe -> auto-opens/closes dead-link
+                                   issues, and opens an `observed`-refresh PR
 ```
 
 ## Working rules / invariants
@@ -41,12 +43,21 @@ scripts/alert_on_dead_links.py     turns a check_links report into GitHub issues
 3. **Rebuild the index after touching entries.** Run `python scripts/build_index.py` and
    commit the updated `catalog.json` in the same change. CI fails if it's stale.
 4. **Never hand-edit `catalog.json`.** It is generated. Edit the YAML, regenerate.
-5. **Verify before you assert.** Do not invent `last_checked` dates or URL reachability.
-   If you can reach the network, confirm `source.canonical_url` and set `last_checked` to
+5. **Verify before you assert.** Do not invent `observed.checked` dates or URL reachability.
+   If you can reach the network, confirm `source.canonical_url` and set `observed.checked` to
    today (`YYYY-MM-DD`). If you cannot verify, say so in the PR — do not fabricate.
-6. **Set `status` honestly:** `live` (reachable + maintained), `frozen` (reachable, no
-   longer updated), `moved` (URL changed), `dark` (gone/404), `mirrored` (we hold a copy).
-   If you mark something `dark`/`frozen`, add a `notes` line and a `archive.wayback_url`.
+   **`observed` is machine-written.** Set `checked` and leave `reachable`, `http_status`, and
+   `final_url` null — only `scripts/check_links.py --write-observed` fills those, from a real
+   probe. Recording your own `curl` output there disguises a human check as a machine one.
+   Report what you observed in the PR body; `status` + `status_source: curator` is where a
+   human call belongs.
+6. **Set `status` honestly:** `live`, `revised`, `moved`, `redirected`, `superseded`, `dark`,
+   `frozen` — see `CONTRIBUTING.md` for the full table. If you mark something `dark`/
+   `superseded`, add a `notes` line and, if you have one, a `recovery[]` candidate.
+   Climate sources make the `redirected` / `moved` distinction load-bearing: agency
+   reorganizations move pages constantly, and a redirect landing somewhere plausible is not
+   evidence the data survived. `moved` only once equivalence is verified; `redirected`
+   otherwise.
 7. **Authoritative sources only.** Point to the publisher's canonical home, not a reposting.
 8. **One dataset = one file = one PR.** Keep changes small and reviewable.
 
@@ -57,6 +68,16 @@ pip install -r requirements.txt
 python scripts/validate.py       # before any commit that touches catalog/
 python scripts/build_index.py    # regenerate catalog.json after entry changes
 python scripts/check_links.py    # verify which sources are still reachable (requires curl)
+```
+
+**Recording what the probe saw.** `check_links.py` reports and exits; it changes nothing
+unless asked. `--write-observed` writes each probe's facts — including `final_url` and the
+redirect chain, which matter more here than in most verticals — into the matching entry's
+`observed` block, and nothing else. `status` is never touched: the machine records what it
+saw, a curator decides what it means. Rebuild the index in the same change.
+
+```bash
+python scripts/check_links.py --write-observed && python scripts/build_index.py
 ```
 
 To add a dataset: copy an existing `catalog/*.yaml`, fill every required field, validate,
@@ -83,3 +104,10 @@ fleet overlay ships in the public repo.
 This is public-interest infrastructure. Accuracy beats coverage: a small, correct, current
 catalog is worth more than a large stale one. When unsure whether something is verifiable,
 under-claim rather than over-claim.
+
+---
+
+*This guide is maintained locally rather than propagated from `almanac-template` — see
+`LOCAL_OVERRIDES` in the org meta-repo's `scripts/propagate-engine.sh`, alongside this
+vertical's `CONTRIBUTING.md`. Engine changes upstream will not reach this file automatically;
+when the schema moves, it needs a hand edit.*
