@@ -69,7 +69,7 @@ New here? Pick a [**good first issue**](https://github.com/almanac-data/climate-
 
 - **Catalog data** (`catalog/`, `catalog.json`) — [CC0 1.0](LICENSE-DATA) (public domain dedication).
   The cataloged datasets are works of the U.S. Government; this index of them is freely reusable.
-- **Tooling** (`scripts/`, schema, CI) — [MIT](LICENSE-CODE).
+- **Tooling** (`scripts/`, schema, CI) — [Apache-2.0](LICENSE-CODE).
 
 ## Acknowledgements
 
