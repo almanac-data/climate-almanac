@@ -93,7 +93,7 @@ rebuild the index, open a PR. See `CONTRIBUTING.md` for the full checklist.
 ## Licensing
 
 Catalog data (`catalog/`, `catalog.json`) is **CC0**; tooling (`scripts/`, schema, CI) is
-**MIT**. Keep new tooling MIT-compatible and keep entries attribution-accurate — every entry
+**Apache-2.0**. Keep new tooling Apache-2.0-compatible and keep entries attribution-accurate — every entry
 must credit its publisher in the `attribution` field, even though the index itself is CC0.
 
 ## Fleet development
