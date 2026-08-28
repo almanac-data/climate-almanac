@@ -14,11 +14,28 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      # One broken version must not hide the other.
+      fail-fast: false
+      matrix:
+        # pyproject declares `requires-python = ">=3.11"` and no version
+        # classifiers, so there is no advertised range to match — the honest
+        # minimum is floor and ceiling. This ran 3.12 alone: neither the
+        # floor these repos claim to support nor the newest runtime was ever
+        # executed.
+        #
+        # This is only safe now. Until today the required status check was
+        # `validate` itself; adding this matrix would have renamed the cells
+        # to `validate (3.11)` and the required context would have stopped
+        # reporting, wedging every PR across twelve repos. The aggregate
+        # `test` job below became the required check first, which is what
+        # makes the matrix free to change shape.
+        python-version: ["3.11", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Validate catalog entries
