@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  # Twelve verticals share this file. None of them had a group, so every push
+  # to a PR branch left the superseded run holding a runner.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -28,3 +34,33 @@ jobs:
         run: |
           pip install pytest
           pytest -q
+
+  # Aggregate gate: branch protection across the fleet requires a single check
+  # named exactly "test". These repos gate on `validate` instead, which is the
+  # only place in the fleet still naming a concrete job — and a concrete job
+  # name is a promise that its shape never changes. It has to change: these
+  # repos declare requires-python >= 3.11 and run 3.12 only, so `validate`
+  # needs a version matrix, and the moment it gets one the cells become
+  # `validate (3.11)` and the required context stops reporting entirely.
+  #
+  # So this job lands FIRST, and the rulesets move to `test`, and only then is
+  # the matrix safe to add. Doing it in the other order wedges every PR in
+  # twelve repos behind a check that will never arrive.
+  #
+  # `if: always()` with an explicit assertion, not a bare `needs:` — a failing
+  # dependency SKIPS a dependent job rather than failing it, and a skipped
+  # required check does not block a merge. The fleet pattern from
+  # homestead/ci.yml and willow-mcp/tests.yml.
+  test:
+    needs: [validate]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert validate actually succeeded
+        # skipped and cancelled count as failures: a leg that did not run has
+        # told us nothing, and this gate speaks for it.
+        if: ${{ needs.validate.result != 'success' }}
+        run: |
+          echo "::error::validate did not succeed (result: ${{ needs.validate.result }})"
+          exit 1
+      - run: echo "validate green"
