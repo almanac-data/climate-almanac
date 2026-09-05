@@ -30,7 +30,7 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-08-04'
+  checked: '2026-09-05'
   reachable: true
   http_status: 200
   final_url: https://podaac.jpl.nasa.gov/cloud-datasets?search=GRACE_LAND_MASCON_CRI_TIME_SERIES_RL0603_Mascons

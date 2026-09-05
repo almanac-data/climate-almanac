@@ -29,7 +29,7 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-08-04'
+  checked: '2026-09-05'
   reachable: true
   http_status: 200
   final_url: https://data.giss.nasa.gov/gistemp/

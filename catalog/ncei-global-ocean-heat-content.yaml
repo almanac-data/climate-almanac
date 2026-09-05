@@ -28,10 +28,10 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-08-04'
-  reachable: true
-  http_status: 200
-  final_url: https://www.ncei.noaa.gov/access/global-ocean-heat-content/
+  checked: '2026-09-05'
+  reachable: false
+  http_status: null
+  final_url: null
   redirect_chain: []
   fingerprint_result: no-baseline
 coverage:

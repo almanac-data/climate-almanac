@@ -44,7 +44,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://berkeleyearth.org/data/",
@@ -101,7 +101,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview",
@@ -157,7 +157,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://www.cpc.ncep.noaa.gov/products/predictions/long_range/",
@@ -212,7 +212,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://www.metoffice.gov.uk/hadobs/hadcrut5/",
@@ -265,7 +265,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://data.giss.nasa.gov/gistemp/",
@@ -320,7 +320,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://podaac.jpl.nasa.gov/cloud-datasets?search=GRACE_LAND_MASCON_CRI_TIME_SERIES_RL0603_Mascons",
@@ -375,7 +375,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://www.ncei.noaa.gov/cdo-web/",
@@ -427,10 +427,10 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
-        "reachable": true,
-        "http_status": 200,
-        "final_url": "https://www.ncei.noaa.gov/access/global-ocean-heat-content/",
+        "checked": "2026-09-05",
+        "reachable": false,
+        "http_status": null,
+        "final_url": null,
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
@@ -478,11 +478,13 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
-        "final_url": "https://www.ncei.noaa.gov/stormevents/",
-        "redirect_chain": [],
+        "final_url": "https://www.ncei.noaa.gov/access/storm-events-database/",
+        "redirect_chain": [
+          "https://www.ncei.noaa.gov/access/storm-events-database/"
+        ],
         "fingerprint_result": "no-baseline"
       },
       "coverage": {
@@ -541,10 +543,10 @@
       "status_since": "2026-06-28",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
-        "reachable": false,
-        "http_status": null,
-        "final_url": null,
+        "checked": "2026-09-05",
+        "reachable": true,
+        "http_status": 200,
+        "final_url": "https://www.ncei.noaa.gov/access/billions/",
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
@@ -601,9 +603,9 @@
       "status_since": "2026-06-28",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
-        "http_status": 503,
+        "http_status": 200,
         "final_url": "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/",
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
@@ -658,7 +660,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily",
@@ -710,7 +712,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://gml.noaa.gov/ccgg/trends/",
@@ -766,7 +768,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://nsidc.org/data/g02135/versions/4",
@@ -836,7 +838,7 @@
       "status_since": "2026-06-28",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://nsidc.org/data/seaice_index",
@@ -891,7 +893,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://droughtmonitor.unl.edu/",
@@ -946,7 +948,7 @@
       "status_since": "2026-06-29",
       "status_source": "auto",
       "observed": {
-        "checked": "2026-08-04",
+        "checked": "2026-09-05",
         "reachable": true,
         "http_status": 200,
         "final_url": "https://waterdata.usgs.gov/",
