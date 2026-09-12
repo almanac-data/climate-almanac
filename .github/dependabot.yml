@@ -1,0 +1,25 @@
+# The fleet Dependabot pack, applied to the hub and propagated to every
+# vertical by propagate-engine.yml (this path is in its allowlist).
+#
+# Two ecosystems, weekly. pip reads requirements.txt and pyproject.toml;
+# minor and patch bumps arrive as one grouped PR so a vertical's steward
+# reviews one dependency PR a week, not one per package. Majors stay
+# separate. github-actions bumps the pinned action majors in the workflows.
+#
+# The fleet's dependabot-automerge.yml is deliberately NOT part of this pack:
+# it arms auto-merge, which needs "Allow auto-merge" on each repository and
+# a release process to absorb it, and neither the hub nor a vertical has one.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
