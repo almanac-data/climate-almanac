@@ -105,6 +105,27 @@ def test_migrate_is_schema_valid_and_flags_nothing_on_the_clean_path():
     Draft202012Validator(schema).validate(v2_entry)
 
 
+def _load_validator():
+    spec = importlib.util.spec_from_file_location("val", ROOT / "scripts" / "validate.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_validate_enforces_date_format():
+    # Without a format checker, JSON Schema accepts any string for "format": "date",
+    # so a starter placeholder left in observed.checked used to pass CI.
+    mod = _load_validator()
+    schema = json.loads((ROOT / "schema" / "catalog-entry.schema.json").read_text())
+    validator = mod.make_validator(schema)
+    entry, _ = _load_migrator().migrate_entry(_v1_entry())
+    assert list(validator.iter_errors(entry)) == []
+    for bad in ("YYYY-MM-DD", "2026-02-30", "07/01/2026"):
+        entry["observed"]["checked"] = bad
+        errors = list(validator.iter_errors(entry))
+        assert [list(e.path) for e in errors] == [["observed", "checked"]], bad
+
+
 def test_migrate_flags_mirrored_status_and_checksum_for_review():
     mod = _load_migrator()
     v2_entry, review = mod.migrate_entry(_v1_entry(status="mirrored", checksum="abc123"))
