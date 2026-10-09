@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Validate every catalog/*.yaml entry against schema/catalog-entry.schema.json.
 
-Also enforces: filename stem == entry id, and ids are unique.
+Also enforces: filename stem == entry id, and ids are unique, and every
+`"format": "date"` field holds a real ISO date (see DATE_FORMAT below).
 Exit non-zero on any failure (CI gate).
 """
 from __future__ import annotations
@@ -12,11 +13,18 @@ import sys
 from pathlib import Path
 
 import yaml
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = ROOT / "schema" / "catalog-entry.schema.json"
 CATALOG = ROOT / "catalog"
+
+# JSON Schema treats `format` as an annotation unless a checker is passed, so
+# without one `observed.checked: YYYY-MM-DD` (a starter placeholder) validates as
+# a date. Only `date` is enforced, and deliberately so: a bare FormatChecker()
+# checks whatever optional format libraries happen to be installed (`uri` needs
+# rfc3987), which would make the same entry pass in CI and fail on a laptop.
+DATE_FORMAT = FormatChecker(formats=["date"])
 
 
 def _stringify_dates(obj):
@@ -32,9 +40,13 @@ def _stringify_dates(obj):
     return obj
 
 
+def make_validator(schema: dict) -> Draft202012Validator:
+    return Draft202012Validator(schema, format_checker=DATE_FORMAT)
+
+
 def main() -> int:
     schema = json.loads(SCHEMA.read_text())
-    validator = Draft202012Validator(schema)
+    validator = make_validator(schema)
 
     errors: list[str] = []
     seen_ids: dict[str, str] = {}
