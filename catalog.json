@@ -1,10 +1,10 @@
 {
   "name": "Climate Almanac",
   "description": "An open, versioned index of public climate data.",
-  "count": 17,
+  "count": 18,
   "by_status": {
     "frozen": 1,
-    "live": 16
+    "live": 17
   },
   "entries": [
     {
@@ -493,6 +493,57 @@
       "license": "public-domain (US Gov work)",
       "attribution": "NOAA National Centers for Environmental Information, Storm Events Database",
       "notes": null
+    },
+    {
+      "id": "ncei-us-climate-normals",
+      "type": "dataset",
+      "title": "U.S. Climate Normals",
+      "description": "NOAA NCEI's official climate-normal products describe typical conditions at nearly 15,000 U.S. weather stations. The current release provides annual, seasonal, monthly, daily, and hourly temperature, precipitation, and other climatological statistics for the 1991–2020 period.\n",
+      "publisher": "NOAA NCEI",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "US"
+      },
+      "topics": [
+        "normals",
+        "temperature",
+        "precipitation",
+        "united-states"
+      ],
+      "source": {
+        "canonical_url": "https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals"
+      },
+      "access": {
+        "method": [
+          "web",
+          "bulk"
+        ],
+        "auth_required": false,
+        "auth_note": null,
+        "rate_limit": null
+      },
+      "format": [
+        "csv"
+      ],
+      "status": "live",
+      "status_since": "2026-10-14",
+      "status_source": "curator",
+      "observed": {
+        "checked": "2026-10-14",
+        "reachable": null,
+        "http_status": null,
+        "final_url": null,
+        "redirect_chain": [],
+        "fingerprint_result": "no-baseline"
+      },
+      "coverage": {
+        "spatial": "United States",
+        "temporal": "1991-2020",
+        "cadence": "static"
+      },
+      "license": "public-domain (US Gov work)",
+      "attribution": "NOAA National Centers for Environmental Information, U.S. Climate Normals",
+      "notes": "The 1991-2020 release is the current conventional 30-year normals period; NCEI also provides supplemental 15-year normals."
     },
     {
       "id": "noaa-billion-dollar-disasters",
