@@ -8,4 +8,4 @@
 # Install:
 #   pip install -r requirements-headless.txt
 #   playwright install --with-deps chromium
-playwright>=1.64.0
+playwright>=1.64.1
