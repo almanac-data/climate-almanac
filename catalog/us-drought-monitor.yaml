@@ -41,6 +41,7 @@ coverage:
   spatial: United States and Puerto Rico
   temporal: 2000-present
   cadence: weekly
-license: public-domain (US Gov partner product; see site terms)
+license: unverified — no data licence stated; © National Drought Mitigation Center (UNL), whose permission page asks for a set credit line when the map is reproduced
 attribution: U.S. Drought Monitor — USDA, NOAA, and University of Nebraska–Lincoln
-notes: null
+notes: |
+  Licence checked 2026-10-31: the earlier public-domain label is not supported. The USDM is produced by the National Drought Mitigation Center at the University of Nebraska–Lincoln with USDA, NOAA and NASA, so it is not a US Government work, and the site footer reads "©2026 - National Drought Mitigation Center". The permission page (https://droughtmonitor.unl.edu/About/Permission.aspx) asks that a reproduced map carry: "The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United States Department of Agriculture, the National Oceanic and Atmospheric Administration and the National Aeronautics and Space Administration. Map courtesy of NDMC." The data citation page states no licence either.
