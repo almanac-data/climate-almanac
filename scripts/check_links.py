@@ -168,7 +168,14 @@ def _probe_headless(url: str, timeout: float) -> tuple[int | None, str]:
         return None, "playwright not installed (see requirements-headless.txt)"
     try:
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+            # The full Chromium build in its new headless mode first: some CDNs
+            # (bls.gov's Akamai, verified 2026-10-31) refuse the slimmer
+            # headless shell that a bare launch() uses, but serve this. Fall back
+            # to the shell where only it is installed (`--only-shell`).
+            try:
+                browser = pw.chromium.launch(headless=True, channel="chromium")
+            except Exception:  # noqa: BLE001 — channel not installed; any launch error
+                browser = pw.chromium.launch(headless=True)
             try:
                 page = browser.new_page(user_agent=BROWSER_UA)
                 resp = page.goto(url, wait_until="domcontentloaded",
