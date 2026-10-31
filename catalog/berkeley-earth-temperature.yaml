@@ -39,6 +39,7 @@ coverage:
   spatial: global
   temporal: 1850-present
   cadence: monthly
-license: CC-BY-NC-SA-4.0 (see Berkeley Earth terms for commercial use)
+license: CC-BY-NC-4.0 (Berkeley Earth data page; commercial licensing by request)
 attribution: Berkeley Earth Surface Temperature Data
-notes: null
+notes: |
+  Licence checked 2026-10-31: Berkeley Earth's data page (https://berkeleyearth.org/data/, renders in a browser; curl gets 403) says "In general, Berkeley Earth's data is licensed under Creative Commons BY-NC 4.0 International for non-commercial use only", with commercial licensing by request to admin@berkeleyearth.org. The earlier string said CC-BY-NC-SA; the page has no ShareAlike term. "In general" leaves room for an individual product to differ.
