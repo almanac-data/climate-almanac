@@ -24,14 +24,17 @@ access:
 format:
 - csv
 - json
-recovery:
-- via: wayback
-  url: https://web.archive.org/web/2026*/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
-  authenticity: asserted
-  permission: ok
 status: live
 status_since: '2026-06-28'
 status_source: auto
+fingerprint:
+  sha256: null
+  etag: null
+  content_length: null
+  captured: '2026-10-31'
+  algo: sha256
+  lead_hash: feb7396c72744fea165730654065ddb365722f8803d3cfd066f467a24e121c67
+  lead_algo: sha256
 observed:
   checked: '2026-08-04'
   reachable: true
@@ -39,6 +42,13 @@ observed:
   final_url: https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261024021053/https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-10-24'
+  notes: Wayback capture made while the resource was live.
 coverage:
   spatial: global, national, US state/county
   temporal: 1850-present (global); 1895-present (US)
