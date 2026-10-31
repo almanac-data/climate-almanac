@@ -780,9 +780,9 @@
     {
       "id": "nsidc-north-american-snow-cover",
       "type": "dataset",
-      "title": "North American Snow Cover Extent (G02135)",
-      "description": "Weekly snow cover extent for North America from the Rutgers Global Snow Lab product archived at NSIDC. Complements sea-ice products for cryosphere and hydrology monitoring.\n",
-      "publisher": "NSIDC (Rutgers Global Snow Lab product)",
+      "title": "North American Snow Cover Extent (Rutgers Global Snow Lab)",
+      "description": "Weekly snow cover extent for North America (with and without Greenland) from the Rutgers Global Snow Lab's 190 km record, kept since late 1966 and archived by NOAA as the Northern Hemisphere Snow Cover Extent Climate Data Record. Complements sea-ice products for cryosphere and hydrology monitoring.\n",
+      "publisher": "Rutgers Global Snow Lab (NOAA Climate Data Record Program)",
       "jurisdiction": {
         "scope": "national",
         "country": "US"
@@ -794,46 +794,41 @@
         "extent"
       ],
       "source": {
-        "canonical_url": "https://nsidc.org/data/g02135",
+        "canonical_url": "https://climate.rutgers.edu/snowcover/",
         "identifiers": {
-          "doi": "10.7265/N5H1308K"
+          "doi": "10.7289/V5N014G9"
         }
       },
       "access": {
         "method": [
           "web",
-          "bulk",
-          "ftp"
+          "bulk"
         ],
         "auth_required": false,
         "auth_note": null,
         "rate_limit": null
       },
       "format": [
-        "ascii",
-        "geotiff"
+        "html",
+        "netcdf"
       ],
       "status": "live",
-      "status_since": "2026-06-29",
-      "status_source": "auto",
+      "status_since": "2026-10-31",
+      "status_source": "curator",
       "observed": {
-        "checked": "2026-08-04",
-        "reachable": true,
-        "http_status": 200,
-        "final_url": "https://nsidc.org/data/g02135/versions/4",
-        "redirect_chain": [
-          "https://nsidc.org/data/g02135/versions/4"
-        ],
-        "fingerprint_result": "no-baseline"
+        "checked": "2026-10-31",
+        "reachable": null,
+        "http_status": null,
+        "final_url": null
       },
       "coverage": {
-        "spatial": "North America",
+        "spatial": "North America (also Eurasia and the Northern Hemisphere)",
         "temporal": "1966-present",
         "cadence": "weekly"
       },
-      "license": "public-domain (US Gov work)",
-      "attribution": "Rutgers Global Snow Lab / NSIDC G02135",
-      "notes": null
+      "license": "no restrictions on use (NOAA CDR Program open data policy, Snow Cover Extent CDR use agreement); citation requested",
+      "attribution": "Robinson, D. A., Estilow, T. W., and NOAA CDR Program, NOAA Climate Data Record of Northern Hemisphere Snow Cover Extent, doi:10.7289/V5N014G9",
+      "notes": "Identity corrected 2026-10-31. This entry previously named G02135 and pointed at https://nsidc.org/data/g02135, which is NSIDC's Sea Ice Index (cataloged separately as nsidc-sea-ice-index), and its DOI 10.7265/N5H1308K returned 404 from DataCite. The product the description named, the Rutgers Global Snow Lab's weekly North American snow cover, is the record repointed to here. The id is kept so existing links to it don't break.\nHuman-verified 2026-10-31: https://climate.rutgers.edu/snowcover/ returned HTTP 200 and describes \"The original weekly snow extent record, from 1966 to present\", with maps, tables and rankings from the 190 km data. Its monthly area table (https://climate.rutgers.edu/snowcover/190km/table_area.php?ui_set=1) has columns for the Northern Hemisphere, Eurasia, North America, and North America without Greenland, back to 1966. NOAA archives the record as the Snow Cover Extent (Northern Hemisphere) CDR (https://www.ncei.noaa.gov/products/climate-data-records/snow-cover-extent), which combines weekly maps (1966 to May 1999) with daily output from June 1999. Its landing page gives the DOI and netCDF downloads.\nLicence checked 2026-10-31: the CDR's use agreement (https://ncei.noaa.gov/pub/data/sds/cdr/CDRs/Snow_Cover_Extent_Northern_Hemisphere/UseAgreement_01B-12.pdf) says \"the CDR data sets are nonproprietary, publicly available, and no restrictions are placed upon their use\", and asks users to cite the data and acknowledge its developers. The record was developed at Rutgers University, so it is not labelled a US Government work.\n"
     },
     {
       "id": "nsidc-sea-ice-index",
