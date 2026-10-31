@@ -73,6 +73,65 @@ def test_probe_headless_failure_never_flags_dead(monkeypatch):
     assert code in mod.BLOCK_CODES  # classified blocked, not dead, downstream
 
 
+def _fake_playwright(monkeypatch, channel_ok):
+    """Install a stand-in playwright.sync_api that records each launch's kwargs."""
+    import types
+
+    launches = []
+
+    class Resp:
+        status = 200
+
+    class Page:
+        def goto(self, url, **kw):
+            return Resp()
+
+    class Browser:
+        def new_page(self, **kw):
+            return Page()
+
+        def close(self):
+            pass
+
+    class Chromium:
+        def launch(self, **kw):
+            launches.append(kw)
+            if "channel" in kw and not channel_ok:
+                raise RuntimeError("Executable doesn't exist")
+            return Browser()
+
+    class PW:
+        chromium = Chromium()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    api = types.ModuleType("playwright.sync_api")
+    api.sync_playwright = PW
+    monkeypatch.setitem(sys.modules, "playwright", types.ModuleType("playwright"))
+    monkeypatch.setitem(sys.modules, "playwright.sync_api", api)
+    return launches
+
+
+def test_headless_prefers_full_chromium_channel(monkeypatch):
+    # bls.gov's CDN refuses the headless shell but serves full Chromium's
+    # new headless mode, so that is the first launch tried.
+    mod = _load_checker()
+    launches = _fake_playwright(monkeypatch, channel_ok=True)
+    assert mod._probe_headless("https://www.bls.gov/cpi/", 5) == (200, "")
+    assert launches == [{"headless": True, "channel": "chromium"}]
+
+
+def test_headless_falls_back_to_shell_when_channel_missing(monkeypatch):
+    mod = _load_checker()
+    launches = _fake_playwright(monkeypatch, channel_ok=False)
+    assert mod._probe_headless("https://www.bls.gov/cpi/", 5) == (200, "")
+    assert launches == [{"headless": True, "channel": "chromium"}, {"headless": True}]
+
+
 def _v1_entry(**overrides):
     base = {
         "id": "example",
