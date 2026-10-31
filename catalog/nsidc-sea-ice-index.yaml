@@ -31,14 +31,17 @@ format:
 - shapefile
 - png
 - netcdf
-recovery:
-- via: wayback
-  url: https://web.archive.org/web/2026*/https://nsidc.org/data/seaice_index
-  authenticity: asserted
-  permission: ok
 status: live
 status_since: '2026-06-28'
 status_source: auto
+fingerprint:
+  sha256: null
+  etag: null
+  content_length: null
+  captured: '2026-10-31'
+  algo: sha256
+  lead_hash: 21425effcbb34affb30abebfb18d6ed9823a1f0aca62880779a2af89b0e4843c
+  lead_algo: sha256
 observed:
   checked: '2026-08-04'
   reachable: true
@@ -46,6 +49,13 @@ observed:
   final_url: https://nsidc.org/data/seaice_index
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261023132139/https://nsidc.org/data/seaice_index
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-10-23'
+  notes: Wayback capture made while the resource was live.
 coverage:
   spatial: Arctic, Antarctic
   temporal: 1978-present

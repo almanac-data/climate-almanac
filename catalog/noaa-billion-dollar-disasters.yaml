@@ -26,14 +26,17 @@ access:
 format:
 - csv
 - json
-recovery:
-- via: wayback
-  url: https://web.archive.org/web/2025*/https://www.ncei.noaa.gov/access/billions/
-  authenticity: asserted
-  permission: ok
 status: frozen
 status_since: '2026-06-28'
 status_source: auto
+fingerprint:
+  sha256: null
+  etag: null
+  content_length: null
+  captured: '2026-10-31'
+  algo: sha256
+  lead_hash: 4ff6adafb363f925d8df40853261fe906e9e45ff95acdaf3d8e33a78a02c7e8c
+  lead_algo: sha256
 observed:
   checked: '2026-08-04'
   reachable: false
@@ -41,6 +44,19 @@ observed:
   final_url: null
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261025085830/https://www.ncei.noaa.gov/access/billions/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-10-25'
+  notes: Wayback capture made while the resource was live.
+- via: wayback
+  url: https://web.archive.org/web/20250101015627/https://www.ncei.noaa.gov/access/billions/
+  authenticity: timestamped
+  permission: ok
+  captured: '2025-01-01'
+  notes: 'Capture from before NOAA announced in 2025 that it would stop updating the database: the state of the record while it was still maintained.'
 coverage:
   spatial: United States
   temporal: 1980-2024
