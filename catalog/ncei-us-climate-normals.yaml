@@ -27,10 +27,10 @@ status: live
 status_since: '2026-10-14'
 status_source: curator
 observed:
-  checked: '2026-10-14'
-  reachable: null
-  http_status: null
-  final_url: null
+  checked: '2026-10-31'
+  reachable: true
+  http_status: 200
+  final_url: https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals
   redirect_chain: []
   fingerprint_result: no-baseline
 coverage:
