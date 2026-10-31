@@ -56,9 +56,9 @@
         "temporal": "1850-present",
         "cadence": "monthly"
       },
-      "license": "CC-BY-NC-SA-4.0 (see Berkeley Earth terms for commercial use)",
+      "license": "CC-BY-NC-4.0 (Berkeley Earth data page; commercial licensing by request)",
       "attribution": "Berkeley Earth Surface Temperature Data",
-      "notes": null
+      "notes": "Licence checked 2026-10-31: Berkeley Earth's data page (https://berkeleyearth.org/data/, renders in a browser; curl gets 403) says \"In general, Berkeley Earth's data is licensed under Creative Commons BY-NC 4.0 International for non-commercial use only\", with commercial licensing by request to admin@berkeleyearth.org. The earlier string said CC-BY-NC-SA; the page has no ShareAlike term. \"In general\" leaves room for an individual product to differ.\n"
     },
     {
       "id": "copernicus-era5-reanalysis",
@@ -115,9 +115,9 @@
         "temporal": "1940-present",
         "cadence": "irregular"
       },
-      "license": "Copernicus Licence (free for research and commercial use with attribution)",
+      "license": "CC-BY-4.0 (Copernicus Climate Data Store; replaced the Licence to use Copernicus Products on 2025-07-02)",
       "attribution": "Copernicus Climate Change Service (C3S) (2025): ERA5 reanalysis. ECMWF.",
-      "notes": "Native hourly fields; catalogue also offers monthly aggregates.\n"
+      "notes": "Native hourly fields; catalogue also offers monthly aggregates.\nLicence checked 2026-10-31: the CDS catalogue API for reanalysis-era5-single-levels returns \"license\": \"CC-BY-4.0\", and the dataset page's Licence heading reads \"CC-BY licence\". ECMWF announced (https://forum.ecmwf.int/t/cc-by-licence-to-replace-licence-to-use-copernicus-products-on-02-july-2025/13464) that CC-BY replaced the Licence to use Copernicus Products across the CDS, ADS and EWDS on 2 July 2025.\n"
     },
     {
       "id": "cpc-long-range-outlooks",
@@ -850,7 +850,7 @@
       "source": {
         "canonical_url": "https://nsidc.org/data/seaice_index",
         "identifiers": {
-          "doi": "10.7265/N5K072F8"
+          "doi": "10.7265/a98x-0f50"
         }
       },
       "access": {
@@ -894,9 +894,9 @@
         "temporal": "1978-present",
         "cadence": "daily"
       },
-      "license": "public-domain (US Gov work)",
+      "license": "unverified — no licence stated; NSIDC requires citation as a condition of use (G02135 landing page)",
       "attribution": "Fetterer, F. et al. Sea Ice Index, NSIDC, Boulder, Colorado USA",
-      "notes": "Hosted at NSIDC (a university-based DAAC), so somewhat insulated from federal site shutdowns — but funded partly through NOAA/NASA, so not immune. Worth watching.\n"
+      "notes": "Hosted at NSIDC (a university-based DAAC), so somewhat insulated from federal site shutdowns — but funded partly through NOAA/NASA, so not immune. Worth watching.\nLicence checked 2026-10-31: the earlier \"public-domain (US Gov work)\" label is not supported. The landing page (https://nsidc.org/data/g02135) says \"As a condition of using these data, you must cite the use of this data set\" and states no licence; NSIDC's data use page (https://nsidc.org/about/data-use-and-copyright) asks for a data citation, and its copyright statements cover the website, not the data. NSIDC is part of CIRES at the University of Colorado Boulder and the dataset's authors include university staff, so it is not shown to be a US Government work. The DOI is updated to Version 4 (10.7265/a98x-0f50, which resolves to /versions/4, where the link checker already lands); the old DOI 10.7265/N5K072F8 resolves to Version 3.\n"
     },
     {
       "id": "us-drought-monitor",
@@ -949,9 +949,9 @@
         "temporal": "2000-present",
         "cadence": "weekly"
       },
-      "license": "public-domain (US Gov partner product; see site terms)",
+      "license": "unverified — no data licence stated; © National Drought Mitigation Center (UNL), whose permission page asks for a set credit line when the map is reproduced",
       "attribution": "U.S. Drought Monitor — USDA, NOAA, and University of Nebraska–Lincoln",
-      "notes": null
+      "notes": "Licence checked 2026-10-31: the earlier public-domain label is not supported. The USDM is produced by the National Drought Mitigation Center at the University of Nebraska–Lincoln with USDA, NOAA and NASA, so it is not a US Government work, and the site footer reads \"©2026 - National Drought Mitigation Center\". The permission page (https://droughtmonitor.unl.edu/About/Permission.aspx) asks that a reproduced map carry: \"The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United States Department of Agriculture, the National Oceanic and Atmospheric Administration and the National Aeronautics and Space Administration. Map courtesy of NDMC.\" The data citation page states no licence either.\n"
     },
     {
       "id": "usgs-nwis-water-data",

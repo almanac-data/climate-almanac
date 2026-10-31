@@ -43,7 +43,8 @@ coverage:
   spatial: global
   temporal: 1940-present
   cadence: irregular
-license: Copernicus Licence (free for research and commercial use with attribution)
+license: CC-BY-4.0 (Copernicus Climate Data Store; replaced the Licence to use Copernicus Products on 2025-07-02)
 attribution: 'Copernicus Climate Change Service (C3S) (2025): ERA5 reanalysis. ECMWF.'
 notes: |
   Native hourly fields; catalogue also offers monthly aggregates.
+  Licence checked 2026-10-31: the CDS catalogue API for reanalysis-era5-single-levels returns "license": "CC-BY-4.0", and the dataset page's Licence heading reads "CC-BY licence". ECMWF announced (https://forum.ecmwf.int/t/cc-by-licence-to-replace-licence-to-use-copernicus-products-on-02-july-2025/13464) that CC-BY replaced the Licence to use Copernicus Products across the CDS, ADS and EWDS on 2 July 2025.

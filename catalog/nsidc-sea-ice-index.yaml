@@ -16,7 +16,7 @@ topics:
 source:
   canonical_url: https://nsidc.org/data/seaice_index
   identifiers:
-    doi: 10.7265/N5K072F8
+    doi: 10.7265/a98x-0f50
 access:
   method:
   - web
@@ -50,7 +50,8 @@ coverage:
   spatial: Arctic, Antarctic
   temporal: 1978-present
   cadence: daily
-license: public-domain (US Gov work)
+license: unverified — no licence stated; NSIDC requires citation as a condition of use (G02135 landing page)
 attribution: Fetterer, F. et al. Sea Ice Index, NSIDC, Boulder, Colorado USA
 notes: |
   Hosted at NSIDC (a university-based DAAC), so somewhat insulated from federal site shutdowns — but funded partly through NOAA/NASA, so not immune. Worth watching.
+  Licence checked 2026-10-31: the earlier "public-domain (US Gov work)" label is not supported. The landing page (https://nsidc.org/data/g02135) says "As a condition of using these data, you must cite the use of this data set" and states no licence; NSIDC's data use page (https://nsidc.org/about/data-use-and-copyright) asks for a data citation, and its copyright statements cover the website, not the data. NSIDC is part of CIRES at the University of Colorado Boulder and the dataset's authors include university staff, so it is not shown to be a US Government work. The DOI is updated to Version 4 (10.7265/a98x-0f50, which resolves to /versions/4, where the link checker already lands); the old DOI 10.7265/N5K072F8 resolves to Version 3.
