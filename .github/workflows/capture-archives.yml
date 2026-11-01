@@ -35,7 +35,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
+      # The PR is pushed and opened with the willow-ci App's token, not GITHUB_TOKEN:
+      # GitHub starts no workflows from events made with GITHUB_TOKEN, so a PR it
+      # opens or pushes to never runs CI. An App token is an ordinary actor, so
+      # this PR gets test and validate like any other. (Propagation PRs use the
+      # same App.) If the App's id or key isn't visible to this repo, the run
+      # falls back to GITHUB_TOKEN and says so; the job never fails over it.
+      - name: Mint a willow-ci token for this repo
+        id: app-token
+        if: vars.WILLOW_CI_APP_ID != ''
+        continue-on-error: true
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.WILLOW_CI_APP_ID }}
+          private-key: ${{ secrets.WILLOW_CI_PRIVATE_KEY }}
       - uses: actions/checkout@v7
+        with:
+          # checkout keeps this token for the later `git push`; the push has to
+          # come from the App too, or the PR's CI never sees the new commit.
+          token: ${{ steps.app-token.outputs.token || github.token }}
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -57,13 +75,19 @@ jobs:
 
       - name: Open or update the archive-refresh PR
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           GH_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: |
           if git diff --quiet; then
             echo "no new captures to record"
             exit 0
+          fi
+          if [ -z "$APP_TOKEN" ]; then
+            echo "::warning::willow-ci token unavailable (needs vars.WILLOW_CI_APP_ID and"\
+                 "secrets.WILLOW_CI_PRIVATE_KEY visible to this repo); using GITHUB_TOKEN,"\
+                 "so this PR will not run CI until someone pushes to it."
           fi
           BRANCH=monitor/archive-refresh
           git config user.name  "github-actions[bot]"
@@ -96,8 +120,9 @@ jobs:
           candidates a person recorded are always kept. The run's report is attached to the
           workflow run as `capture-report`.
 
-          A PR opened by GitHub Actions does not trigger CI. Run `python scripts/validate.py`
-          on the branch (the workflow already did) or push a commit before merging.
+          CI runs on this PR when the willow-ci token was available to the workflow; the
+          run's log warns when it fell back to GITHUB_TOKEN, and then CI won't run here
+          until someone pushes a commit.
           BODY
           )" 2>"$RUNNER_TEMP/pr-create.err"; then
             cat "$RUNNER_TEMP/pr-create.err"
