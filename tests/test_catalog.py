@@ -460,3 +460,34 @@ def test_capture_skips_a_capture_no_newer_than_recorded(monkeypatch):
     e = _cap_entry(recovery=[{"via": "wayback", "url": "u", "authenticity": "timestamped",
                               "captured": "2026-06-01"}])
     assert mod.capture_one(e, dt.date(2026, 11, 1))["candidate"] is None
+
+
+def test_capture_waits_for_a_timed_out_save_to_land(monkeypatch):
+    import datetime as dt
+    mod = _load_capture()
+    seen = iter(["20260601000000", None, "20261101090000"])
+    waits = []
+    monkeypatch.setattr(mod, "save_page_now", lambda url: 0)
+    monkeypatch.setattr(mod, "newest_capture", lambda url: next(seen))
+    monkeypatch.setattr(mod.time, "sleep", waits.append)
+    c = mod.capture_one(_cap_entry(), dt.date(2026, 11, 1))["candidate"]
+    assert c["captured"] == "2026-11-01" and "a capture it requested" in c["notes"]
+    assert waits == list(mod.SETTLE_WAITS[:2])
+
+
+def test_every_probe_asks_for_html_like_a_browser(monkeypatch):
+    mod = _load_checker()
+    seen = {}
+
+    class _Proc:
+        returncode = 0
+        stdout = "200\thttps://crates.io/crates/serde"
+        stderr = ""
+
+    def run(cmd, **k):
+        seen["cmd"] = cmd
+        return _Proc()
+
+    monkeypatch.setattr(mod.subprocess, "run", run)
+    assert mod._curl("https://crates.io/crates/serde", 5, "ua").code == 200
+    assert seen["cmd"][seen["cmd"].index("-H") + 1].startswith("Accept: text/html")
