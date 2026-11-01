@@ -1,0 +1,44 @@
+id: dwd-open-data
+type: dataset
+title: DWD Open Data Server (Deutscher Wetterdienst)
+description: |
+  Germany's national meteorological service's open data server: the Climate Data Center's station observations for Germany (1-minute to annual and multi-annual values), gridded climate data, regional averages and global observations, alongside weather forecasts, numerical weather prediction output, radar, warnings and satellite products, all as files without registration.
+publisher: Deutscher Wetterdienst (DWD)
+jurisdiction:
+  scope: national
+  country: DE
+topics:
+- weather
+- climate-observations
+- germany
+- nwp
+source:
+  canonical_url: https://opendata.dwd.de/
+access:
+  method:
+  - bulk
+  - web
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format:
+- zip
+- txt
+- grib2
+status: live
+status_since: '2026-11-01'
+status_source: curator
+observed:
+  checked: '2026-11-01'
+  reachable: null
+  http_status: null
+  final_url: null
+coverage:
+  spatial: Germany (station and grid level), with European grids and global observations
+  temporal: varies by product (start years not checked)
+  cadence: daily
+license: CC-BY-4.0 (CDC Terms_of_use on opendata.dwd.de and DWD legal notice)
+attribution: "Deutscher Wetterdienst (DWD), with a source note (Quellenvermerk) per https://www.dwd.de/copyright"
+notes: |
+  Human-verified 2026-11-01: HTTP 200. The root is a plain directory listing ("Index of /") with climate_environment/ and weather/, both updated 2026-11-01. README.txt says "Within its legal mandate, DWD offers weather and climate data free of charge on its Open Data server at https://opendata.dwd.de. Access is granted without registration." The Climate Data Center folder (/climate_environment/CDC/) holds observations_germany, observations_global, grids_germany, grids_europe, regional_averages_DE, derived_germany and event_catalogues; observations_germany/climate/ runs from 1_minute to annual and multi_annual; daily/kl/recent/ held station zip files dated 31-Oct-2026. The weather/ folder holds alerts, nwp, radar, satellite, local and text forecasts. grib2 is the usual NWP format and wasn't opened; the txt-in-zip format of station files is assumed from the names. Start years per product weren't checked.
+  Licence checked 2026-11-01: https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf reads "Terms of use for data on the CDC-OpenData area: The Creative Commons BY 4.0 - Licence 'CC BY 4.0' apply. For detailed information see https://www.dwd.de/copyright. Status: Mai 2024." That link redirects to DWD's legal notice (https://www.dwd.de/DE/service/rechtliche_hinweise/rechtliche_hinweise_node.html), which says (in German) that all freely accessible geodata and DWD's high-value datasets may be reused "unter den Bedingungen der Lizenz Creative Commons BY 4.0 (CC BY 4.0) unter Beigabe eines Quellenvermerks" (under CC BY 4.0, with a source note), and that content with third-party rights is marked as such. The README also notes DWD stores visitors' IP addresses for up to 7 days.
