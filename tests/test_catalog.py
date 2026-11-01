@@ -367,3 +367,96 @@ def test_a_real_http_status_still_parses(monkeypatch):
 
     monkeypatch.setattr(mod.subprocess, "run", lambda *a, **k: _Proc())
     assert mod._curl("https://agency.gov/gone", 5, "ua").code == 404
+
+
+# ── scripts/capture_archives.py ─────────────────────────────────────────────
+
+def _load_capture():
+    spec = importlib.util.spec_from_file_location("ca", ROOT / "scripts" / "capture_archives.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _cap_entry(**over):
+    e = {"id": "x", "status": "live", "source": {"canonical_url": "https://example.gov/data"}}
+    e.update(over)
+    return e
+
+
+def test_capture_due_only_live_or_frozen_and_stale():
+    import datetime as dt
+    mod = _load_capture()
+    today = dt.date(2026, 11, 1)
+    old = [{"via": "wayback", "url": "u", "authenticity": "timestamped", "captured": "2026-06-01"}]
+    new = [{"via": "wayback", "url": "u", "authenticity": "timestamped", "captured": "2026-10-20"}]
+    assert mod.due(_cap_entry(), today, 90)                         # never captured
+    assert mod.due(_cap_entry(recovery=old), today, 90)             # stale
+    assert not mod.due(_cap_entry(recovery=new), today, 90)         # recent
+    assert not mod.due(_cap_entry(status="dark"), today, 90)        # not monitored
+    assert mod.due(_cap_entry(status="frozen"), today, 90)
+
+
+def test_capture_merge_keeps_people_ranks_by_authenticity_and_caps_machine():
+    mod = _load_capture()
+    url = "https://example.gov/data"
+    human = {"via": "community", "url": "https://mirror.org/x", "authenticity": "asserted",
+             "notes": "A steward's note."}
+    wildcard = {"via": "wayback", "url": "https://web.archive.org/web/2025*/https://example.gov/data",
+                "authenticity": "asserted"}
+    machine = [{"via": "wayback", "url": f"https://web.archive.org/web/2026010{i}000000/{url}",
+                "authenticity": "timestamped", "captured": f"2026-01-0{i}",
+                "notes": mod.MACHINE_NOTE + " on 2026-01-0{i}."} for i in range(1, 5)]
+    cand = {"via": "wayback", "url": f"https://web.archive.org/web/20261101000000/{url}",
+            "authenticity": "hash-verified", "captured": "2026-11-01", "notes": mod.MACHINE_NOTE + "."}
+    out = mod.merge([human, wildcard, *machine], url, cand)
+    assert out[0] == cand                                  # best authenticity first
+    assert human in out                                    # a person's candidate is never dropped
+    assert wildcard not in out                             # the vague wildcard is superseded
+    got = [r for r in out if str(r.get("notes", "")).startswith(mod.MACHINE_NOTE)]
+    assert len(got) == mod.KEEP_MACHINE                    # bounded
+    assert {r["captured"] for r in got} == {"2026-11-01", "2026-01-04", "2026-01-03"}
+
+
+def test_capture_write_recovery_changes_nothing_else(tmp_path):
+    import yaml
+    mod = _load_capture()
+    src = ROOT / "catalog" / "example-dataset.yaml"
+    p = tmp_path / "e.yaml"
+    p.write_text(src.read_text() if src.exists() else
+                 "id: e\nstatus: live\nrecovery:\n- via: wayback\n  url: https://w/1\n"
+                 "  authenticity: asserted\ncoverage:\n  cadence: annual\nlicense: x\n")
+    before = yaml.safe_load(p.read_text())
+    rec = [{"via": "wayback", "url": "https://web.archive.org/web/20261101000000/https://e",
+            "authenticity": "timestamped", "permission": "ok", "captured": "2026-11-01"}]
+    mod.write_recovery(p, rec)
+    after = yaml.safe_load(p.read_text())
+    assert after["recovery"] == rec
+    assert {k: v for k, v in after.items() if k != "recovery"} == \
+           {k: v for k, v in before.items() if k != "recovery"}
+
+
+def test_capture_hash_verified_only_when_bytes_match(monkeypatch):
+    import datetime as dt
+    import hashlib
+    mod = _load_capture()
+    body = b"%PDF-1.7 the artifact"
+    monkeypatch.setattr(mod, "save_page_now", lambda url: 200)
+    monkeypatch.setattr(mod, "newest_capture", lambda url: "20261101120000")
+    monkeypatch.setattr(mod, "fetch", lambda url, timeout=90: (200, body, url))
+    today = dt.date(2026, 11, 1)
+    good = _cap_entry(fingerprint={"sha256": hashlib.sha256(body).hexdigest()})
+    bad = _cap_entry(fingerprint={"sha256": "0" * 64})
+    assert mod.capture_one(good, today)["candidate"]["authenticity"] == "hash-verified"
+    assert mod.capture_one(bad, today)["candidate"]["authenticity"] == "timestamped"
+    assert mod.capture_one(_cap_entry(), today)["candidate"]["authenticity"] == "timestamped"
+
+
+def test_capture_skips_a_capture_no_newer_than_recorded(monkeypatch):
+    import datetime as dt
+    mod = _load_capture()
+    monkeypatch.setattr(mod, "save_page_now", lambda url: 429)
+    monkeypatch.setattr(mod, "newest_capture", lambda url: "20260601000000")
+    e = _cap_entry(recovery=[{"via": "wayback", "url": "u", "authenticity": "timestamped",
+                              "captured": "2026-06-01"}])
+    assert mod.capture_one(e, dt.date(2026, 11, 1))["candidate"] is None

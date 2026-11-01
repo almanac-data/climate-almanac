@@ -1,0 +1,111 @@
+name: capture-archives
+
+# Weekly: ask the Internet Archive to capture live sources whose newest Wayback
+# copy in recovery[] is missing or older than 90 days, and record each capture as
+# a dated recovery[] candidate. It runs on GitHub's runners because archive.org's
+# Save Page Now rate-limits and resets shared egress that a workstation or agent
+# sandbox often sits behind.
+on:
+  schedule:
+    # Wednesdays 15:17 UTC, away from the daily 12:00 link check.
+    - cron: "17 15 * * 3"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "At most this many entries this run"
+        type: number
+        default: 10
+      max_age:
+        description: "Re-capture when the newest capture is older than this many days"
+        type: number
+        default: 90
+
+# contents + pull-requests: pushes a branch and opens a PR. It never pushes to
+# the default branch, and it writes `recovery` only — never status or observed.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: capture-archives
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Capture and record
+        run: |
+          python scripts/capture_archives.py --write --json \
+            --limit "${{ inputs.limit || 10 }}" --max-age "${{ inputs.max_age || 90 }}" \
+            | tee capture-report.json
+          python scripts/build_index.py
+          python scripts/validate.py
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: capture-report
+          path: capture-report.json
+
+      - name: Open or update the archive-refresh PR
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GH_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          if git diff --quiet; then
+            echo "no new captures to record"
+            exit 0
+          fi
+          BRANCH=monitor/archive-refresh
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add catalog catalog.json
+          git commit -m "chore(monitor): record archive captures from the $(date -u +%Y-%m-%d) run
+
+          Written by scripts/capture_archives.py --write. recovery[] only:
+          dated Wayback captures, hash-verified where a file's capture matches
+          its fingerprint.sha256. status, observed and fingerprint are untouched."
+          # One rolling PR: force-push the same branch every run.
+          git push -f origin "$BRANCH"
+
+          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            echo "archive-refresh PR already open — branch updated in place"
+            exit 0
+          fi
+          if ! gh pr create --head "$BRANCH" --base "$DEFAULT_BRANCH" \
+                 --title "chore(monitor): record new archive captures" \
+                 --body "$(cat <<'BODY'
+          Opened automatically by `.github/workflows/capture-archives.yml`.
+
+          `scripts/capture_archives.py --write` asked the Internet Archive's Save Page Now to
+          capture live sources whose newest Wayback copy was missing or stale, and recorded
+          each capture in the entry's `recovery[]` as a dated candidate (`timestamped`, or
+          `hash-verified` when a file's capture matches its `fingerprint.sha256`).
+
+          **recovery[] only.** `status`, `observed` and `fingerprint` are untouched, and
+          candidates a person recorded are always kept. The run's report is attached to the
+          workflow run as `capture-report`.
+
+          A PR opened by GitHub Actions does not trigger CI. Run `python scripts/validate.py`
+          on the branch (the workflow already did) or push a commit before merging.
+          BODY
+          )" 2>"$RUNNER_TEMP/pr-create.err"; then
+            cat "$RUNNER_TEMP/pr-create.err"
+            if grep -q "not permitted to create or approve pull requests" "$RUNNER_TEMP/pr-create.err"; then
+              echo "::warning::Branch $BRANCH is pushed with this run's captures, but GitHub"\
+                   "Actions may not open PRs in this repo. Open it here:"\
+                   "$GH_REPO_URL/compare/$DEFAULT_BRANCH...$BRANCH"
+              exit 0
+            fi
+            exit 1
+          fi
