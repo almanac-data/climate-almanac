@@ -1,0 +1,43 @@
+id: jma-past-weather-data
+type: dataset
+title: Japan Meteorological Agency Past Weather Data (過去の気象データ検索)
+description: |
+  The Japan Meteorological Agency's archive of station observations across Japan: hourly, daily, ten-day, monthly and annual values of temperature, precipitation, wind, sunshine, snow and more for its observing stations, with climatological normals, searchable by station and date and downloadable as CSV.
+publisher: Japan Meteorological Agency (JMA)
+jurisdiction:
+  scope: national
+  country: JP
+topics:
+- weather
+- climate-observations
+- japan
+- asia-pacific
+source:
+  canonical_url: https://www.data.jma.go.jp/stats/etrn/index.php
+access:
+  method:
+  - web
+  - bulk
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format:
+- csv
+- html
+status: live
+status_since: '2026-11-01'
+status_source: curator
+observed:
+  checked: '2026-11-01'
+  reachable: null
+  http_status: null
+  final_url: null
+coverage:
+  spatial: Japan (station level)
+  temporal: varies by station; search offers years through 2026 (start years not checked)
+  cadence: daily
+license: "PDL-1.0 (Public Data License Version 1.0, JMA website terms of use; stated as compatible with CC-BY-4.0)"
+attribution: "Source: Japan Meteorological Agency website (URL of relevant page); state if the content was edited"
+notes: |
+  Human-verified 2026-11-01: HTTP 200. The issue's URL https://www.data.jma.go.jp/ is only a meta refresh to JMA's home page (https://www.jma.go.jp/jma/index.html), so this entry points at the data itself. The search page (title "気象庁｜過去の気象データ検索", Past weather data search) reads "地点と年月日時を選択して、表示するデータの種類を選択してください" (choose a station and date, then the data type) with year options from 2026 back; the old /obd/stats/etrn/ path redirects here. CSV downloads are on the companion page https://www.data.jma.go.jp/risk/obsdl/index.php ("過去の気象データ・ダウンロード", with a "CSVファイルの形式" help link; read in headless Chromium). Both pages are in Japanese; the English "Climate of Japan" page (https://www.data.jma.go.jp/stats/data/en/index.html) offers "Tables of Climatological Normals (1991–2020)" and "Tables of Monthly Climate Statistics". Station start years, the full list of elements and any API weren't checked.
+  Licence checked 2026-11-01: JMA's terms of use (https://www.jma.go.jp/jma/en/copyright.html) say "Information made available on the Japan Meteorological Agency website ('Content') may be used in accordance with the terms and conditions of use stipulated in Public Data License (Version 1.0), unless otherwise indicated by a specific rights notice", require citing the source (e.g. "Source: Japan Meteorological Agency website (URL of relevant page)") and marking edits, and say "The Terms of Use are compatible with the Creative Commons Attribution License 4.0 ... Content based on the Terms of Use may be used under the CC License in lieu of the Terms of Use." Use may also be limited by the Meteorological Service Act (forecasting licences, warnings), which doesn't affect past observations.
