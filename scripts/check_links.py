@@ -14,7 +14,8 @@ User-Agent is built from almanac.config.yml (slug + homepage) so agencies can se
 who is checking. Three refinements keep the monitor from crying wolf at bot defenses:
 
   1. Browser-UA retry. A block code (401/403/406/429) triggers one retry with a
-     common browser User-Agent — some hosts only sniff the UA.
+     common browser User-Agent — some hosts only sniff the UA. Every probe sends
+     a browser's Accept header too, since some hosts 404 a bare `*/*`.
   2. Headless fallback (opt-in). Many federal hosts (BLS, Census, Congress.gov,
      SEC, GAO) sit behind CDN bot protection (JS challenge + TLS fingerprinting)
      that no curl can satisfy — a 403 there is not a 404. When `--headless` is on
@@ -48,6 +49,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "catalog"
 CONFIG = ROOT / "almanac.config.yml"
 DEFAULT_TIMEOUT = 12
+# Sent with every probe. curl's default `Accept: */*` gets a 404 from sites that
+# serve their pages only to browsers asking for HTML (crates.io does); a browser's
+# Accept still takes any file type, so data downloads are unaffected.
+ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
 BROWSER_UA = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/124.0 Safari/537.36"
@@ -127,7 +132,7 @@ def _curl(url: str, timeout: float, ua: str) -> Probe:
     with tempfile.NamedTemporaryFile("w+", suffix=".hdr", delete=True) as hdr:
         cmd = ["curl", "-sS", "-o", "/dev/null", "-D", hdr.name,
                "-w", "%{http_code}\t%{url_effective}",
-               "--max-time", str(int(timeout)), "-A", ua, "-L", url]
+               "--max-time", str(int(timeout)), "-A", ua, "-H", f"Accept: {ACCEPT}", "-L", url]
         try:
             proc = subprocess.run(cmd, capture_output=True, text=True,
                                   timeout=timeout + 5, check=False)

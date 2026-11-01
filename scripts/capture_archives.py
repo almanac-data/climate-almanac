@@ -46,6 +46,10 @@ MACHINE_NOTE = "Recorded by scripts/capture_archives.py"
 KEEP_MACHINE = 3
 RANK = {"hash-verified": 0, "cross-archive": 1, "timestamped": 2, "asserted": 3}
 MONITORED = {"live", "frozen"}
+# Save Page Now often takes minutes on a large page, and a request that times out
+# here may still finish there; so wait longer, then look again before giving up.
+SPN_TIMEOUT = 300
+SETTLE_WAITS = (30, 60, 120)
 
 
 def _user_agent() -> str:
@@ -84,7 +88,7 @@ def newest_capture(url: str) -> str | None:
 def save_page_now(url: str) -> int:
     """Ask Save Page Now for a fresh capture. Returns the HTTP status (0 = network failure)."""
     for attempt in range(3):
-        code, _, _ = fetch("https://web.archive.org/save/" + url, 180)
+        code, _, _ = fetch("https://web.archive.org/save/" + url, SPN_TIMEOUT)
         if code != 429:
             return code
         time.sleep(60 * (attempt + 1))
@@ -143,6 +147,14 @@ def capture_one(entry: dict, today: dt.date) -> dict:
     url = entry["source"]["canonical_url"]
     spn = save_page_now(url)
     ts = newest_capture(url)
+    fresh_from = (today - dt.timedelta(days=1)).isoformat()
+    if spn == 0 or 200 <= spn < 300:
+        # timed out on our side, or accepted: the capture may still be landing
+        for wait in SETTLE_WAITS:
+            if ts and _date(ts) >= fresh_from:
+                break
+            time.sleep(wait)
+            ts = newest_capture(url) or ts
     result = {"id": entry["id"], "url": url, "save_status": spn, "candidate": None}
     if not ts:
         result["note"] = "no capture available"
@@ -152,7 +164,7 @@ def capture_one(entry: dict, today: dt.date) -> dict:
         result["note"] = f"newest capture ({_date(ts)}) is no newer than the one recorded"
         return result
     snap = f"https://web.archive.org/web/{ts}/{url}"
-    fresh = _date(ts) >= (today - dt.timedelta(days=1)).isoformat()
+    fresh = _date(ts) >= fresh_from
     auth = "timestamped"
     note = (f"{MACHINE_NOTE} on {today.isoformat()}: a capture it requested from Save Page Now."
             if fresh else
