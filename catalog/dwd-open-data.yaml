@@ -30,9 +30,11 @@ status_since: '2026-11-01'
 status_source: curator
 observed:
   checked: '2026-11-01'
-  reachable: null
-  http_status: null
-  final_url: null
+  reachable: true
+  http_status: 200
+  final_url: https://opendata.dwd.de/
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: Germany (station and grid level), with European grids and global observations
   temporal: varies by product (start years not checked)
