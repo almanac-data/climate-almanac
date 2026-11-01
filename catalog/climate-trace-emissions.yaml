@@ -1,0 +1,45 @@
+id: climate-trace-emissions
+type: dataset
+title: Climate TRACE Emissions Inventory
+description: |
+  An independent, facility-level inventory of greenhouse-gas and air-pollutant emissions built from satellite observations, remote sensing and models by a not-for-profit coalition: hundreds of millions of emitting assets across 10 sectors and 67 sub-sectors, aggregated by city, state and country, with monthly data since 2021.
+publisher: Climate TRACE coalition
+jurisdiction:
+  scope: international-ngo
+  country: null
+topics:
+- emissions
+- greenhouse-gases
+- facility-level
+- satellite
+source:
+  canonical_url: https://climatetrace.org/
+access:
+  method:
+  - web
+  - bulk
+  - api
+  auth_required: false
+  auth_note: "The public API is a beta: \"we cannot guarantee availability ... please keep volume low\"."
+  rate_limit: null
+format:
+- csv
+- gpkg
+- json
+status: live
+status_since: '2026-11-01'
+status_source: curator
+observed:
+  checked: '2026-11-01'
+  reachable: null
+  http_status: null
+  final_url: null
+coverage:
+  spatial: global (source, city, subnational and country level)
+  temporal: 2015-2025 annual, monthly from 2021; release 5.12.0 runs through August 2026
+  cadence: monthly
+license: CC-BY-4.0 (Climate TRACE terms of use; some external datasets such as EDGAR and FAOSTAT keep their own terms)
+attribution: Climate TRACE, using the suggested citation in its data guide, indicating any changes made
+notes: |
+  Human-verified 2026-11-01: HTTP 200. The home page says "Track Global Emissions from 745 million sources of greenhouse gases and air pollutants worldwide", "Built by a global not-for-profit coalition of over 100 universities, scientists, and AI experts", "Group emissions by 10 industrial sectors broken into 67 sub-sectors", and "Follow 10+ years of data (2015-2025) with monthly data available from 2021". The data page (https://climatetrace.org/data) shows "Latest Data Release Oct 29, 2026 ... October release 5.12.0 includes monthly emissions data through August 2026", a country/sector download tool, geopackage boundary files, a "Public API Beta", and says "Previous versions of Climate TRACE data can be found on Zenodo." Climate TRACE estimates are modelled, not reported inventories; they complement the official UNFCCC data. The csv format is assumed from the download packages and wasn't opened; the API wasn't called.
+  Licence checked 2026-11-01: https://climatetrace.org/terms says "The emissions data and associated metadata has been made available via Climate TRACE under the Creative Commons Attribution 4.0 International License (CC BY 4.0), with the exception of external datasets listed below", and that users may reuse it "for any purpose, including commercial use, as long as you attribute it to Climate TRACE and indicate if you have made any changes". The listed exceptions include country-level estimates for several sectors taken from EDGAR and FAOSTAT, facility data from E-PRTR, US EPA FLIGHT and LMOP, Israel's PRTR and Canada's GHGRP, and ownership data from sources such as OpenCorporates and Wikipedia.
