@@ -43,7 +43,7 @@ fingerprint:
   lead_hash: 21425effcbb34affb30abebfb18d6ed9823a1f0aca62880779a2af89b0e4843c
   lead_algo: sha256
 observed:
-  checked: '2026-08-04'
+  checked: '2026-11-01'
   reachable: true
   http_status: 200
   final_url: https://nsidc.org/data/seaice_index

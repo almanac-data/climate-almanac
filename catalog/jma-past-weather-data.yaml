@@ -29,9 +29,11 @@ status_since: '2026-11-01'
 status_source: curator
 observed:
   checked: '2026-11-01'
-  reachable: null
-  http_status: null
-  final_url: null
+  reachable: true
+  http_status: 200
+  final_url: https://www.data.jma.go.jp/stats/etrn/index.php
+  redirect_chain: []
+  fingerprint_result: no-baseline
 coverage:
   spatial: Japan (station level)
   temporal: varies by station; search offers years through 2026 (start years not checked)

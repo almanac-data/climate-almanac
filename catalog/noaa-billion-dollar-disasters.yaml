@@ -38,10 +38,10 @@ fingerprint:
   lead_hash: 4ff6adafb363f925d8df40853261fe906e9e45ff95acdaf3d8e33a78a02c7e8c
   lead_algo: sha256
 observed:
-  checked: '2026-08-04'
-  reachable: false
-  http_status: null
-  final_url: null
+  checked: '2026-11-01'
+  reachable: true
+  http_status: 200
+  final_url: https://www.ncei.noaa.gov/access/billions/
   redirect_chain: []
   fingerprint_result: no-baseline
 recovery:

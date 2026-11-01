@@ -36,9 +36,9 @@ fingerprint:
   lead_hash: feb7396c72744fea165730654065ddb365722f8803d3cfd066f467a24e121c67
   lead_algo: sha256
 observed:
-  checked: '2026-08-04'
+  checked: '2026-11-01'
   reachable: true
-  http_status: 503
+  http_status: 200
   final_url: https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
   redirect_chain: []
   fingerprint_result: no-baseline
