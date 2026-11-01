@@ -1,10 +1,10 @@
 {
   "name": "Climate Almanac",
   "description": "An open, versioned index of public climate data.",
-  "count": 21,
+  "count": 22,
   "by_status": {
     "frozen": 1,
-    "live": 20
+    "live": 21
   },
   "entries": [
     {
@@ -59,6 +59,54 @@
       "license": "CC-BY-NC-4.0 (Berkeley Earth data page; commercial licensing by request)",
       "attribution": "Berkeley Earth Surface Temperature Data",
       "notes": "Licence checked 2026-10-31: Berkeley Earth's data page (https://berkeleyearth.org/data/, renders in a browser; curl gets 403) says \"In general, Berkeley Earth's data is licensed under Creative Commons BY-NC 4.0 International for non-commercial use only\", with commercial licensing by request to admin@berkeleyearth.org. The earlier string said CC-BY-NC-SA; the page has no ShareAlike term. \"In general\" leaves room for an individual product to differ.\n"
+    },
+    {
+      "id": "bom-climate-data-online",
+      "type": "dataset",
+      "title": "Bureau of Meteorology Climate Data Online",
+      "description": "Australia's national weather service's station climate data: daily and monthly rainfall, temperature and solar exposure observations and statistics for current and historical weather stations across Australia, searchable by map or text and downloadable per station.\n",
+      "publisher": "Australian Bureau of Meteorology",
+      "jurisdiction": {
+        "scope": "national",
+        "country": "AU"
+      },
+      "topics": [
+        "weather",
+        "climate-observations",
+        "rainfall",
+        "australia"
+      ],
+      "source": {
+        "canonical_url": "https://www.bom.gov.au/climate/data/"
+      },
+      "access": {
+        "method": [
+          "web"
+        ],
+        "auth_required": false,
+        "auth_note": null,
+        "rate_limit": null
+      },
+      "format": [
+        "csv"
+      ],
+      "status": "live",
+      "status_since": "2026-11-01",
+      "status_source": "curator",
+      "observed": {
+        "checked": "2026-11-01",
+        "reachable": null,
+        "http_status": null,
+        "final_url": null
+      },
+      "coverage": {
+        "spatial": "Australia (station level, current and historical stations)",
+        "temporal": "varies by station (start years not checked)",
+        "cadence": "daily"
+      },
+      "license": "CC-BY-4.0 (Climate Data Online page and Bureau of Meteorology copyright notice)",
+      "attribution": "Bureau of Meteorology, © Commonwealth of Australia. Licensed from the Commonwealth of Australia under a Creative Commons Attribution 4.0 International licence.",
+      "notes": "Human-verified 2026-11-01: HTTP 200 (page title \"Climate Data Online - Map search\"). The page says \"You can get daily and monthly statistics, historical weather observations, rainfall, temperature and solar tables, graphs and data\", offers a text search and a map search by station, and links \"Latest rainfall totals, daily and monthly data\" and station listings. On 2026-11-01 it carried outage banners: \"Some radar data, warnings, and observations are not available due to a technical issue\" and \"Data outage: Some data might not be available due to a Bureau-wide network outage. Data is in the process of being recovered.\" The csv format is assumed from CDO's per-station downloads and wasn't tested; station start years weren't checked. Larger or custom extracts go through BoM's data services requests page, which redirects to reg.bom.gov.au.\nLicence checked 2026-11-01: the CDO page itself says \"Unless otherwise noted, all material returned by Climate Data Online are licensed under the Creative Commons Attribution 4.0 International Licence.\" The copyright notice (https://www.bom.gov.au/copyright, redirected from /other/copyright.shtml) gives the preferred attribution quoted above. It also says \"we do not allow you to use automated or manual techniques to hack, scrape or otherwise extract material from our site\", so bulk use should go through BoM's data services rather than scraping.\n"
     },
     {
       "id": "climate-trace-emissions",
