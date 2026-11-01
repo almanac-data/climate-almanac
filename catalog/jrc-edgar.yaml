@@ -1,0 +1,44 @@
+id: jrc-edgar
+type: dataset
+title: EDGAR - Emissions Database for Global Atmospheric Research
+description: |
+  The European Commission Joint Research Centre's independent global inventory of anthropogenic greenhouse-gas and air-pollutant emissions, built with a consistent IPCC methodology from international statistics: national totals by sector for every country and 0.1-degree gridmaps, annual from 1970 with monthly data for recent years.
+publisher: European Commission, Joint Research Centre (JRC)
+jurisdiction:
+  scope: regional-bloc
+  country: null
+topics:
+- emissions
+- greenhouse-gases
+- air-pollutants
+- inventories
+source:
+  canonical_url: https://edgar.jrc.ec.europa.eu/
+access:
+  method:
+  - web
+  - bulk
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format:
+- zip
+- xlsx
+- netcdf
+status: live
+status_since: '2026-11-01'
+status_source: curator
+observed:
+  checked: '2026-11-01'
+  reachable: null
+  http_status: null
+  final_url: null
+coverage:
+  spatial: global (all countries; 0.1 x 0.1 degree grids)
+  temporal: 1970-2025 for greenhouse gases (EDGAR_2026_GHG; F-gases from 1990)
+  cadence: annual
+license: "CC-BY-4.0 (EDGAR_2026_GHG conditions of use), except the IEA-EDGAR fossil CO2 component, which is CC-BY-NC-ND-4.0"
+attribution: "European Commission, Joint Research Centre (JRC), EDGAR Community GHG database (IEA-EDGAR CO2, EDGAR CH4, EDGAR N2O, EDGAR F-gases), version EDGAR_2026_GHG (2026); full citation on each dataset page"
+notes: |
+  Human-verified 2026-11-01: HTTP 200. The home page says "EDGAR is a multipurpose, independent, global database of anthropogenic emissions of greenhouse gases and air pollution on Earth" that "provides independent emission estimates compared to what reported by European Member States or by Parties under the United Nations Framework Convention on Climate Change (UNFCCC)", as "national totals and gridmaps at 0.1 x 0.1 degree resolution at global level, with yearly, monthly and up to hourly data". The data page (https://edgar.jrc.ec.europa.eu/emissions_data_and_maps) lists "EDGAR_2026_GHG 1970-2025 (CO2, CH4, N2O, F-gases)" plus air-pollutant, food, toxic-pollutant, HTAP and temporal-profile datasets. The 2026 report says "global GHG emissions in 2025 reached 54.1 Gt CO2eq". The EDGAR_2026_GHG page (https://edgar.jrc.ec.europa.eu/dataset_ghg2026) links 91 zip files on jeodpp.jrc.ec.europa.eu (one, EDGAR_CH4_1970_2025.zip, answered 200, 5.7 MB); gridmap archives are named *_nc.zip. The xlsx format inside the country-total zips is assumed and wasn't opened. This entry covers the whole database; the air-pollutant datasets' licences weren't checked.
+  Licence checked 2026-11-01: the site's terms page (https://edgar.jrc.ec.europa.eu/terms) says "Users are obliged to consult and refer to the full citation and conditions of use available on each specific dataset webpage." The EDGAR_2026_GHG conditions of use say "Unless otherwise noted, all material owned by the European Union is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence", and that IEA-EDGAR CO2 data "are based on data from IEA (2025) Greenhouse Gas Emissions from Energy ... as modified by the Joint Research Centre, licensed under CC BY-NC-ND 4.0. Users of the IEA-EDGAR CO2 data should contact the IEA at compliance@iea.org if they wish to use such data outside the terms of the CC-BY-NC-ND 4.0 licence." So fossil CO2 is non-commercial, no-derivatives; CH4, N2O and F-gases are CC BY 4.0.
