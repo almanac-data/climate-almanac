@@ -1,0 +1,41 @@
+id: unfccc-ghg-data-interface
+type: dataset
+title: UNFCCC Greenhouse Gas Inventory Data Interface
+description: |
+  The UNFCCC secretariat's interface to the national greenhouse-gas inventories that Parties report under the Convention: time series, detailed data by Party, comparisons by gas and category, GHG profiles and flexible queries for Annex I and non-Annex I Parties, plus Kyoto Protocol compilation and accounting data.
+publisher: United Nations Framework Convention on Climate Change (UNFCCC) secretariat
+jurisdiction:
+  scope: multilateral
+  country: null
+topics:
+- emissions
+- greenhouse-gases
+- inventories
+- official-reporting
+source:
+  canonical_url: https://di.unfccc.int/
+access:
+  method:
+  - web
+  auth_required: false
+  auth_note: null
+  rate_limit: null
+format:
+- xlsx
+status: live
+status_since: '2026-11-01'
+status_source: curator
+observed:
+  checked: '2026-11-01'
+  reachable: null
+  http_status: null
+  final_url: null
+coverage:
+  spatial: Parties to the Convention (Annex I in detail; non-Annex I from national communications and biennial update reports)
+  temporal: base year and 1990 onward; the Annex I time series showed a last inventory year of 2021
+  cadence: irregular
+license: "public domain with conditions: official data may be freely copied provided no change to the content is introduced and the source is acknowledged (UNFCCC terms of use)"
+attribution: UNFCCC secretariat, Greenhouse Gas Inventory Data (di.unfccc.int)
+notes: |
+  Human-verified 2026-11-01: HTTP 200, but plain curl gets only an Incapsula bot-protection script; headless Chromium with a desktop user agent and a 15-second wait rendered it. The root redirects to https://di.unfccc.int/time_series ("Greenhouse Gas Inventory Data - Time Series - Annex I"), with modules "Detailed data by Party, Comparison by Category, Comparison by Gas, GHG profiles, Global map - Annex I, Flexible queries, User-defined indicators, Compilation and Accounting Data", an "Export to Excel" button, and a table of GHG totals without LULUCF in kt CO2 equivalent whose columns run from the base year to "Last Inventory Year (2021)". UNFCCC's page on the data (https://unfccc.int/topics/mitigation/resources/registry-and-data/ghg-data-from-unfccc) says "The secretariat has completed the upgrade of all nine modules of the GHG data interface on 8 November 2019." The interface looks behind the latest submissions: its newest inventory year is 2021, though Annex I Parties submit annually and reporting under the Paris Agreement's Enhanced Transparency Framework began in 2024. Whether newer data lives in another UNFCCC tool wasn't checked. Climate-almanac should set reachability.headless for this entry.
+  Licence checked 2026-11-01: UNFCCC terms of use (https://unfccc.int/this-site/terms-of-use, read in headless Chromium) say "All official texts, data and documents, including low resolution webcast transmissions, are in the public domain and may be freely downloaded, copied and printed provided no change to the content is introduced, and the source is duly acknowledged." The same page also grants general site content only "for the User's personal, non-commercial use, without any right to resell or redistribute them or to compile or create derivative works therefrom", "subject to more specific restrictions that may apply to specific Content". Inventory data is official data, so the public-domain sentence is taken to apply, but the "no change to the content" condition is unusual and a steward may want UNFCCC to confirm it.
