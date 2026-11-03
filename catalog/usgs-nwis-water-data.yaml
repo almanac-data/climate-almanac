@@ -31,12 +31,11 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-11-02'
+  checked: '2026-11-03'
   reachable: true
-  http_status: 200
-  final_url: https://waterdata.usgs.gov/
-  redirect_chain:
-  - http://waterdata.usgs.gov/
+  http_status: 403
+  final_url: https://waterdata.usgs.gov/nwis
+  redirect_chain: []
   fingerprint_result: no-baseline
 coverage:
   spatial: United States and territories
