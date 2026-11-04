@@ -34,6 +34,13 @@ observed:
   final_url: https://www.data.jma.go.jp/stats/etrn/index.php
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261012082430/https://www.data.jma.go.jp/stats/etrn/index.php
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-10-12'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 0).'
 coverage:
   spatial: Japan (station level)
   temporal: varies by station; search offers years through 2026 (start years not checked)
