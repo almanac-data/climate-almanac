@@ -35,6 +35,13 @@ observed:
   final_url: https://edgar.jrc.ec.europa.eu/
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261104214251/https://edgar.jrc.ec.europa.eu/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-11-04'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now.'
 coverage:
   spatial: global (all countries; 0.1 x 0.1 degree grids)
   temporal: 1970-2025 for greenhouse gases (EDGAR_2026_GHG; F-gases from 1990)

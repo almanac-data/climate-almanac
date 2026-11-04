@@ -51,6 +51,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104211932/https://berkeleyearth.org/data/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "global",
         "temporal": "1850-present",
@@ -101,6 +111,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104062742/https://www.bom.gov.au/climate/data/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "Australia (station level, current and historical stations)",
         "temporal": "varies by station (start years not checked)",
@@ -155,6 +175,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104212243/https://climatetrace.org/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "global (source, city, subnational and country level)",
         "temporal": "2015-2025 annual, monthly from 2021; release 5.12.0 runs through August 2026",
@@ -214,6 +244,16 @@
         ],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20260903022257/https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-09-03",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 200)."
+        }
+      ],
       "coverage": {
         "spatial": "global",
         "temporal": "1940-present",
@@ -268,6 +308,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261020055148/https://www.cpc.ncep.noaa.gov/products/predictions/long_range/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-10-20",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 200)."
+        }
+      ],
       "coverage": {
         "spatial": "United States (CONUS-focused products)",
         "temporal": "operational; archives vary by product",
@@ -321,6 +371,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104213519/https://opendata.dwd.de/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "Germany (station and grid level), with European grids and global observations",
         "temporal": "varies by product (start years not checked)",
@@ -373,6 +433,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261012082430/https://www.data.jma.go.jp/stats/etrn/index.php",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-10-12",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 0)."
+        }
+      ],
       "coverage": {
         "spatial": "Japan (station level)",
         "temporal": "varies by station; search offers years through 2026 (start years not checked)",
@@ -426,6 +496,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104214251/https://edgar.jrc.ec.europa.eu/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "global (all countries; 0.1 x 0.1 degree grids)",
         "temporal": "1970-2025 for greenhouse gases (EDGAR_2026_GHG; F-gases from 1990)",
@@ -481,6 +561,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261025112933/https://www.metoffice.gov.uk/hadobs/hadcrut5/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-10-25",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 0)."
+        }
+      ],
       "coverage": {
         "spatial": "global",
         "temporal": "1850-present",
@@ -534,6 +624,16 @@
         "redirect_chain": [],
         "fingerprint_result": "no-baseline"
       },
+      "recovery": [
+        {
+          "via": "wayback",
+          "url": "https://web.archive.org/web/20261104215103/https://data.giss.nasa.gov/gistemp/",
+          "authenticity": "timestamped",
+          "permission": "ok",
+          "captured": "2026-11-04",
+          "notes": "Recorded by scripts/capture_archives.py on 2026-11-04: a capture it requested from Save Page Now."
+        }
+      ],
       "coverage": {
         "spatial": "global",
         "temporal": "1880-present",

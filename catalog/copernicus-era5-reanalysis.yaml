@@ -39,6 +39,13 @@ observed:
   redirect_chain:
   - https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20260903022257/https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-09-03'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-04: the newest existing capture (Save Page Now returned 200).'
 coverage:
   spatial: global
   temporal: 1940-present
