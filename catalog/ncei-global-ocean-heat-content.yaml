@@ -28,7 +28,7 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-11-03'
+  checked: '2026-11-04'
   reachable: true
   http_status: 200
   final_url: https://www.ncei.noaa.gov/access/global-ocean-heat-content/
