@@ -31,7 +31,7 @@ status: live
 status_since: '2026-06-29'
 status_source: auto
 observed:
-  checked: '2026-11-08'
+  checked: '2026-11-09'
   reachable: true
   http_status: 202
   final_url: https://waterdata.usgs.gov/nwis
