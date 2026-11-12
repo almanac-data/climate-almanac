@@ -34,6 +34,13 @@ observed:
   redirect_chain:
   - https://www.ncei.noaa.gov/access/storm-events-database/
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20260827174943/https://www.ncei.noaa.gov/stormevents/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-08-27'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-11: the newest existing capture (Save Page Now returned 523).'
 coverage:
   spatial: United States
   temporal: 1950-present

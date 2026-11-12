@@ -36,6 +36,13 @@ observed:
   final_url: https://climate.rutgers.edu/snowcover/
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261027035546/https://climate.rutgers.edu/snowcover/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-10-27'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-11: the newest existing capture (Save Page Now returned 0).'
 coverage:
   spatial: North America (also Eurasia and the Northern Hemisphere)
   temporal: 1966-present

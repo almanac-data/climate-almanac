@@ -32,6 +32,13 @@ observed:
   final_url: https://di.unfccc.int/
   redirect_chain: []
   fingerprint_result: no-baseline
+recovery:
+- via: wayback
+  url: https://web.archive.org/web/20261111221122/https://di.unfccc.int/
+  authenticity: timestamped
+  permission: ok
+  captured: '2026-11-11'
+  notes: 'Recorded by scripts/capture_archives.py on 2026-11-11: a capture it requested from Save Page Now.'
 coverage:
   spatial: Parties to the Convention (Annex I in detail; non-Annex I from national communications and biennial update reports)
   temporal: base year and 1990 onward; the Annex I time series showed a last inventory year of 2021
