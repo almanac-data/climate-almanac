@@ -106,10 +106,13 @@ jobs:
           # and candidates a person recorded are always kept, so nothing here needs a
           # human: the PR merges itself once `test` passes. Without the App token CI
           # never runs on it, so it is not armed and waits instead.
+          # Arm with the auto-merge mutation itself, not `gh pr merge --auto`: when a PR has
+          # nothing pending (a repo with no required checks), gh quietly merges it on the
+          # spot, before CI has run. The mutation only ever arms, or fails and the PR waits.
           arm() {
             if [ -z "$APP_TOKEN" ]; then
               echo "::warning::no willow-ci token, so CI won't run and the PR can't merge itself."
-            elif ! gh pr merge "$BRANCH" --auto --merge; then
+            elif ! gh api graphql -f query='mutation($id:ID!){enablePullRequestAutoMerge(input:{pullRequestId:$id,mergeMethod:MERGE}){clientMutationId}}' -f id="$(gh pr view "$BRANCH" --json id -q .id)" >/dev/null; then
               echo "::warning::could not arm auto-merge — check Settings > General >"\
                    "Allow auto-merge. The PR is left for a human."
             fi

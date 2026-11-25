@@ -8,7 +8,7 @@ name: dependabot-automerge
 # exercise everything (link-check's headless rung, for one).
 #
 # Needs "Allow auto-merge" (Settings -> General) on the repository. Without it
-# `gh pr merge --auto` fails, this job warns, and the PR waits as it always did.
+# arming auto-merge fails, this job warns, and the PR waits as it always did.
 #
 # Runs on GITHUB_TOKEN: a Dependabot-triggered run gets no Actions secrets, so
 # the willow-ci App can't be minted here. The one consequence is that the merge
@@ -44,7 +44,10 @@ jobs:
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
         run: |
           echo "update type: ${UPDATE_TYPE:-unknown}"
-          if ! gh pr merge --auto --merge "$PR_URL"; then
+          # Arm with the auto-merge mutation itself, not `gh pr merge --auto`: when a PR has
+          # nothing pending (a repo with no required checks), gh quietly merges it on the
+          # spot, before CI has run. The mutation only ever arms, or fails and the PR waits.
+          if ! gh api graphql -f query='mutation($id:ID!){enablePullRequestAutoMerge(input:{pullRequestId:$id,mergeMethod:MERGE}){clientMutationId}}' -f id="$(gh pr view "$PR_URL" --json id -q .id)" >/dev/null; then
             echo "::warning::could not arm auto-merge on $PR_URL — check Settings >"\
                  "General > Allow auto-merge. The PR is left for a human."
           fi
