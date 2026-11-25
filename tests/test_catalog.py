@@ -491,3 +491,40 @@ def test_every_probe_asks_for_html_like_a_browser(monkeypatch):
     monkeypatch.setattr(mod.subprocess, "run", run)
     assert mod._curl("https://crates.io/crates/serde", 5, "ua").code == 200
     assert seen["cmd"][seen["cmd"].index("-H") + 1].startswith("Accept: text/html")
+
+
+# --- routine vs notable refresh (check_links.py --observed-changes-since) ---------
+
+def test_a_moved_checked_date_alone_is_routine():
+    mod = _load_checker()
+    old = {"checked": "2026-11-24", "reachable": True, "http_status": 200,
+           "final_url": "https://example.org/", "redirect_chain": [], "fingerprint_result": None}
+    assert mod.notable_observed_changes(old, {**old, "checked": "2026-11-25"}) == {}
+
+
+def test_any_other_observed_change_is_notable():
+    mod = _load_checker()
+    old = {"checked": "2026-11-24", "reachable": True, "http_status": 200,
+           "final_url": "https://example.org/", "redirect_chain": []}
+    new = {**old, "checked": "2026-11-25", "http_status": 404,
+           "redirect_chain": ["https://example.org/", "https://example.org/gone"]}
+    assert mod.notable_observed_changes(old, new) == {
+        "http_status": {"was": 200, "now": 404},
+        "redirect_chain": {"was": [], "now": ["https://example.org/", "https://example.org/gone"]},
+    }
+
+
+def test_a_field_appearing_for_the_first_time_is_notable():
+    mod = _load_checker()
+    changes = mod.notable_observed_changes({"checked": "2026-11-24"},
+                                           {"checked": "2026-11-25", "fingerprint_result": "match"})
+    assert changes == {"fingerprint_result": {"was": None, "now": "match"}}
+
+
+def test_rendered_changes_lead_with_the_count():
+    mod = _load_checker()
+    assert mod.render_observed_changes([]) == "notable: 0\n\n"
+    out = mod.render_observed_changes(
+        [{"id": "foo", "changes": {"http_status": {"was": 200, "now": 503}}}])
+    assert out.splitlines()[0] == "notable: 1"
+    assert "- `foo`" in out and "`http_status`: `200` → `503`" in out

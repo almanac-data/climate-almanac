@@ -12,9 +12,10 @@ on:
         default: false
 
 # issues:        the alert step opens, updates, and closes dead-link issues.
-# contents + pull-requests: the observed-refresh step pushes a branch and opens a PR.
+# contents + pull-requests: the observed-refresh step pushes a branch, opens a PR, and
+#                arms auto-merge on it when the refresh is routine (only `checked` moved).
 #                It never pushes to the default branch — machine facts still land
-#                through review, and `status` is never touched by any of this.
+#                through a PR and `test`, and `status` is never touched by any of this.
 permissions:
   contents: write
   issues: write
@@ -94,6 +95,13 @@ jobs:
           python scripts/check_links.py --write-observed || true
           python scripts/build_index.py
 
+      # Routine vs notable. A refresh where only `checked` dates moved says nothing
+      # but "the probe ran"; it goes up as a PR with auto-merge on, lands by itself
+      # once `test` passes, and asks nothing of anyone. A refresh where anything else
+      # in `observed` changed (reachable, http_status, final_url, redirect_chain,
+      # fingerprint_result) stays a PR for a human, with the changes listed in its
+      # body. Both go through a PR because the default branch's ruleset requires one
+      # and a passing `test`; auto-merge satisfies it without a bypass.
       - name: Open or update the observed-refresh PR
         if: always() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
         env:
@@ -109,8 +117,22 @@ jobs:
           if [ -z "$APP_TOKEN" ]; then
             echo "::warning::willow-ci token unavailable (needs vars.WILLOW_CI_APP_ID and"\
                  "secrets.WILLOW_CI_PRIVATE_KEY visible to this repo); using GITHUB_TOKEN,"\
-                 "so this PR will not run CI until someone pushes to it."
+                 "so this PR will not run CI or merge itself until someone pushes to it."
           fi
+
+          # Measured against the default branch, so a change stays notable until a
+          # human merges it, and a PR whose change has since reverted turns routine.
+          python scripts/check_links.py --observed-changes-since HEAD > "$RUNNER_TEMP/changes.md"
+          notable=$(head -1 "$RUNNER_TEMP/changes.md" | sed 's/^notable: //')
+          changes=$(tail -n +3 "$RUNNER_TEMP/changes.md")
+          if [ "${notable:-0}" = "0" ]; then
+            title="chore(monitor): refresh observed from the daily probe"
+            summary="**Routine** — only \`checked\` dates moved. This PR merges itself once \`test\` passes; nothing here needs a human."
+          else
+            title="monitor: $notable source(s) answered differently — review observed"
+            summary=$(printf '**Needs a look** — %s source(s) changed beyond the `checked` date:\n\n%s' "$notable" "$changes")
+          fi
+
           BRANCH=monitor/observed-refresh
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -126,43 +148,61 @@ jobs:
           # rather than a daily pile of near-identical ones.
           git push -f origin "$BRANCH"
 
-          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
-            echo "observed-refresh PR already open — branch updated in place"
-            exit 0
-          fi
+          body=$(cat <<BODY
+          $summary
 
-          # Opening the PR needs "Allow GitHub Actions to create and approve pull
-          # requests" (Settings -> Actions -> General). That is a repo/org toggle the
-          # workflow's `permissions:` block cannot grant, and it is off by default.
-          # When it is off we keep the branch — the probe's work is already pushed and
-          # safe — and tell a human to open the PR, rather than failing a job whose
-          # actual work succeeded. Enable the toggle and this becomes automatic.
-          if ! gh pr create --head "$BRANCH" --base "$DEFAULT_BRANCH" \
-                 --title "chore(monitor): refresh observed from the daily probe" \
-                 --body "$(cat <<'BODY'
-          Opened automatically by `.github/workflows/link-check.yml`.
+          ---
 
-          `scripts/check_links.py --write-observed` recorded what the daily probe actually
-          saw into each entry's `observed` block, and `catalog.json` was rebuilt to match.
+          Opened automatically by \`.github/workflows/link-check.yml\`.
+          \`scripts/check_links.py --write-observed\` recorded what the daily probe actually
+          saw into each entry's \`observed\` block, and \`catalog.json\` was rebuilt to match.
 
-          **Facts only.** `status`, `status_source`, and `status_since` are untouched. A
-          redirect showing up in `final_url` or `redirect_chain` may well mean an entry
-          should be reclassified `redirected` / `moved` / `superseded` — that judgment is
-          yours to make in a separate change, which is what SCHEMA-V2.md open item 5 is
-          about.
+          **Facts only.** \`status\`, \`status_source\`, and \`status_since\` are untouched. A
+          redirect showing up in \`final_url\` or \`redirect_chain\` may well mean an entry
+          should be reclassified \`redirected\` / \`moved\` / \`superseded\` — that judgment is
+          yours to make in a separate change (SCHEMA-V2.md open item 5).
 
           This branch is force-pushed on every run, so this PR reflects the most recent
-          probe rather than accumulating one PR per day. Review the diff, not the history.
+          probe against \`$DEFAULT_BRANCH\`. Review the diff, not the history.
           BODY
-          )" 2>"$RUNNER_TEMP/pr-create.err"; then
-            cat "$RUNNER_TEMP/pr-create.err"
-            if grep -q "not permitted to create or approve pull requests" "$RUNNER_TEMP/pr-create.err"; then
-              echo "::warning::Branch $BRANCH is pushed with this probe's observed data, but"\
-                   "GitHub Actions may not open PRs in this repo. Open it here:"\
-                   "$GH_REPO_URL/compare/$DEFAULT_BRANCH...$BRANCH — or enable"\
-                   "Settings > Actions > General > Allow GitHub Actions to create and approve"\
-                   "pull requests to have this happen automatically."
-              exit 0
+          )
+
+          pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --title "$title" --body "$body"
+            echo "observed-refresh PR #$pr updated in place"
+          else
+            # Opening the PR needs "Allow GitHub Actions to create and approve pull
+            # requests" (Settings -> Actions -> General). That is a repo/org toggle the
+            # workflow's `permissions:` block cannot grant, and it is off by default.
+            # When it is off we keep the branch — the probe's work is already pushed and
+            # safe — and tell a human to open the PR, rather than failing a job whose
+            # actual work succeeded. Enable the toggle and this becomes automatic.
+            if ! gh pr create --head "$BRANCH" --base "$DEFAULT_BRANCH" \
+                   --title "$title" --body "$body" 2>"$RUNNER_TEMP/pr-create.err"; then
+              cat "$RUNNER_TEMP/pr-create.err"
+              if grep -q "not permitted to create or approve pull requests" "$RUNNER_TEMP/pr-create.err"; then
+                echo "::warning::Branch $BRANCH is pushed with this probe's observed data, but"\
+                     "GitHub Actions may not open PRs in this repo. Open it here:"\
+                     "$GH_REPO_URL/compare/$DEFAULT_BRANCH...$BRANCH — or enable"\
+                     "Settings > Actions > General > Allow GitHub Actions to create and approve"\
+                     "pull requests to have this happen automatically."
+                exit 0
+              fi
+              exit 1
             fi
-            exit 1
+            pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          fi
+
+          if [ "${notable:-0}" != "0" ]; then
+            # A routine PR from an earlier run may still have auto-merge armed (say its
+            # CI failed); a notable one must wait for a human, so disarm it.
+            gh pr merge "$pr" --disable-auto 2>/dev/null || true
+            echo "notable change — PR #$pr left for review"
+          elif [ -z "$APP_TOKEN" ]; then
+            echo "::warning::routine refresh, but without the willow-ci token CI never runs"\
+                 "on PR #$pr, so it cannot merge itself."
+          elif ! gh pr merge "$pr" --auto --merge; then
+            echo "::warning::could not enable auto-merge on PR #$pr — check Settings >"\
+                 "General > Allow auto-merge. The PR is open for a human instead."
           fi
