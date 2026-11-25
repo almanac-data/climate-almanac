@@ -2,13 +2,12 @@
 # vertical by propagate-engine.yml (this path is in its allowlist).
 #
 # Two ecosystems, weekly. pip reads requirements.txt and pyproject.toml;
-# minor and patch bumps arrive as one grouped PR so a vertical's steward
-# reviews one dependency PR a week, not one per package. Majors stay
+# minor and patch bumps arrive as one grouped PR a week, not one per package. Majors stay
 # separate. github-actions bumps the pinned action majors in the workflows.
 #
-# The fleet's dependabot-automerge.yml is deliberately NOT part of this pack:
-# it arms auto-merge, which needs "Allow auto-merge" on each repository and
-# a release process to absorb it, and neither the hub nor a vertical has one.
+# Minor and patch PRs merge themselves once `test` passes:
+# workflows/dependabot-automerge.yml arms auto-merge on them (and is
+# propagated alongside this file). Majors wait for a human.
 version: 2
 updates:
   - package-ecosystem: "github-actions"

@@ -7,6 +7,9 @@ declared `status` still matches reality.
 Read-only by default. With `--write-observed` it writes what it saw back into
 each entry's `observed` block — the only thing in this repo permitted to do so,
 because `observed` records machine facts and a hand-transcribed probe is not one.
+With `--observed-changes-since REV` it probes nothing and instead reports which
+entries' `observed` changed against REV in anything beyond the `checked` date —
+how the daily workflow tells a routine refresh from one a human should read.
 It never touches `status`, `status_source`, or `status_since`: the machine
 records facts, a human assigns the lifecycle label.
 
@@ -309,6 +312,57 @@ def replace_observed_block(text: str, block: str) -> str | None:
     return "\n".join(lines[:start] + block.splitlines() + lines[end:]) + trailing
 
 
+# `checked` moves on every probe by construction; a change there says only that the
+# probe ran. Every other `observed` field changing means the source answered
+# differently, which is what a curator may want to reclassify.
+ROUTINE_OBSERVED_FIELDS = {"checked"}
+
+
+def notable_observed_changes(old: dict | None, new: dict | None) -> dict:
+    """{field: {"was": old, "now": new}} for every non-routine `observed` field that differs."""
+    old, new = old or {}, new or {}
+    changes = {}
+    for key in sorted(set(old) | set(new)):
+        if key in ROUTINE_OBSERVED_FIELDS:
+            continue
+        if old.get(key) != new.get(key):
+            changes[key] = {"was": old.get(key), "now": new.get(key)}
+    return changes
+
+
+def observed_changes_since(rev: str) -> list[dict]:
+    """Entries whose working-tree `observed` differs from `rev` beyond `checked`.
+
+    An entry absent at `rev` is skipped: it arrived by hand, not from the probe,
+    and was reviewed on its way in.
+    """
+    found = []
+    for path in sorted(CATALOG.glob("*.yaml")):
+        rel = path.relative_to(ROOT).as_posix()
+        shown = subprocess.run(["git", "-C", str(ROOT), "show", f"{rev}:{rel}"],
+                               capture_output=True, text=True, check=False)
+        if shown.returncode != 0:
+            continue
+        old = (yaml.safe_load(shown.stdout) or {}).get("observed")
+        entry = yaml.safe_load(path.read_text()) or {}
+        changes = notable_observed_changes(old, entry.get("observed"))
+        if changes:
+            found.append({"id": entry.get("id") or path.stem, "changes": changes})
+    return found
+
+
+def render_observed_changes(found: list[dict]) -> str:
+    """`notable: N`, a blank line, then a Markdown list a PR body can carry as is."""
+    lines = [f"notable: {len(found)}", ""]
+    for item in found:
+        lines.append(f"- `{item['id']}`")
+        for key, change in item["changes"].items():
+            was = json.dumps(change["was"], ensure_ascii=False)
+            now = json.dumps(change["now"], ensure_ascii=False)
+            lines.append(f"  - `{key}`: `{was}` → `{now}`")
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true", help="machine-readable output")
@@ -321,7 +375,14 @@ def main() -> int:
     ap.add_argument("--write-observed", action="store_true",
                     help="write the probe's facts back into each entry's `observed` block "
                          "(status is never touched). Re-run build_index.py afterwards.")
+    ap.add_argument("--observed-changes-since", metavar="REV",
+                    help="probe nothing; report entries whose `observed` differs from REV "
+                         "in anything but `checked` (first line: `notable: N`)")
     args = ap.parse_args()
+
+    if args.observed_changes_since:
+        print(render_observed_changes(observed_changes_since(args.observed_changes_since)), end="")
+        return 0
 
     today = _dt.date.today().isoformat()
     report = []

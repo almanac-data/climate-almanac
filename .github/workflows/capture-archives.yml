@@ -20,7 +20,7 @@ on:
         type: number
         default: 90
 
-# contents + pull-requests: pushes a branch and opens a PR. It never pushes to
+# contents + pull-requests: pushes a branch, opens a PR and arms auto-merge. It never pushes to
 # the default branch, and it writes `recovery` only — never status or observed.
 permissions:
   contents: write
@@ -102,8 +102,22 @@ jobs:
           # One rolling PR: force-push the same branch every run.
           git push -f origin "$BRANCH"
 
+          # recovery[] candidates are machine records (dated captures, never a status),
+          # and candidates a person recorded are always kept, so nothing here needs a
+          # human: the PR merges itself once `test` passes. Without the App token CI
+          # never runs on it, so it is not armed and waits instead.
+          arm() {
+            if [ -z "$APP_TOKEN" ]; then
+              echo "::warning::no willow-ci token, so CI won't run and the PR can't merge itself."
+            elif ! gh pr merge "$BRANCH" --auto --merge; then
+              echo "::warning::could not arm auto-merge — check Settings > General >"\
+                   "Allow auto-merge. The PR is left for a human."
+            fi
+          }
+
           if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
             echo "archive-refresh PR already open — branch updated in place"
+            arm
             exit 0
           fi
           if ! gh pr create --head "$BRANCH" --base "$DEFAULT_BRANCH" \
@@ -120,9 +134,8 @@ jobs:
           candidates a person recorded are always kept. The run's report is attached to the
           workflow run as `capture-report`.
 
-          CI runs on this PR when the willow-ci token was available to the workflow; the
-          run's log warns when it fell back to GITHUB_TOKEN, and then CI won't run here
-          until someone pushes a commit.
+          This PR merges itself once `test` passes. When the willow-ci token wasn't
+          available the run's log says so, CI won't run here, and it waits for a human.
           BODY
           )" 2>"$RUNNER_TEMP/pr-create.err"; then
             cat "$RUNNER_TEMP/pr-create.err"
@@ -134,3 +147,4 @@ jobs:
             fi
             exit 1
           fi
+          arm
