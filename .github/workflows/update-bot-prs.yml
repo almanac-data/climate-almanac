@@ -1,0 +1,76 @@
+name: update-bot-prs
+
+# Keeps PRs that are waiting to merge themselves up to date with the default
+# branch. The ruleset requires a PR's branch to be current with main before it
+# merges ("require branches to be up to date"), and auto-merge does not update a
+# branch on its own: a rolling bot PR that falls behind when something else
+# lands would otherwise wait for a human to click "Update branch".
+#
+# Scope: open PRs with auto-merge armed — exactly the set that is waiting only on
+# CI. A PR nobody armed is left alone, and so is one whose update would conflict
+# (GitHub refuses it; the PR then needs a human, as it would anyway).
+#
+# The update is pushed with the willow-ci App's token, not GITHUB_TOKEN: a commit
+# made with GITHUB_TOKEN starts no workflows, so `test` would never re-run on the
+# updated branch and auto-merge would wait forever. Without the App the job warns
+# and does nothing.
+#
+# On push to main, plus an hourly sweep: a merge that auto-merge performs on
+# GITHUB_TOKEN's behalf (Dependabot's) is itself a push that wakes nothing.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-bot-prs
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint a willow-ci token for this repo
+        id: app-token
+        if: vars.WILLOW_CI_APP_ID != ''
+        continue-on-error: true
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.WILLOW_CI_APP_ID }}
+          private-key: ${{ secrets.WILLOW_CI_PRIVATE_KEY }}
+
+      - name: Update armed PRs that fell behind
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::willow-ci token unavailable; an update pushed with GITHUB_TOKEN"\
+                 "would not re-run CI, so nothing is updated."
+            exit 0
+          fi
+          base="${DEFAULT_BRANCH:-main}"
+          gh api "repos/$REPO/pulls?state=open&base=$base&per_page=100" --paginate \
+            --jq '.[] | select(.auto_merge != null) | "\(.number) \(.head.sha)"' |
+          while read -r number sha; do
+            # Commits on the base branch that this PR's head lacks.
+            behind=$(gh api "repos/$REPO/compare/$sha...$base" --jq .ahead_by)
+            if [ "${behind:-0}" = "0" ]; then
+              echo "#$number is current"
+              continue
+            fi
+            if gh api -X PUT "repos/$REPO/pulls/$number/update-branch" \
+                 -f expected_head_sha="$sha" --silent; then
+              echo "#$number was $behind behind $base — updated"
+            else
+              echo "::warning::#$number is $behind behind $base and could not be updated"\
+                   "(likely a conflict); it needs a human."
+            fi
+          done
