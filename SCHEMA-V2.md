@@ -288,7 +288,8 @@ genuinely open.)*
    a lifecycle label — `status_source` stays `curator` for anything but the cleanest cases).
 
    Half of this is now settled by construction. The daily job writes `observed` and opens a
-   PR (`monitor/observed-refresh`) rather than pushing to the default branch, and it touches
+   PR (`monitor/observed-refresh`) rather than pushing to the default branch — merging itself
+   when only `checked` moved, waiting for a curator when anything else did — and it touches
    no lifecycle field: `status`, `status_source`, and `status_since` are never written by any
    automation. So the *facts* are captured automatically and the *label* still is not. What
    remains genuinely open is narrower than it was — whether a machine may ever propose a
